@@ -17,6 +17,8 @@ Use your favourite IDE, or use [Sublime Text 3](http://www.sublimetext.com/3) li
 * babel-cli
 * browserify
 
+Sign up an account with [openweather](http://home.openweathermap.org/users/sign_in) and replace config.js with your own API_KEY.
+
 Install Node.js, run `npm install` to download the dependencies, then start the server.
 ```
 npm install
