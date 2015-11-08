@@ -1,0 +1,22 @@
+{
+  "name": "React-mirror",
+  "description": "Smart mirror using ReactJS",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "babelify": "*",
+    "react-intl": "1.2.0",
+    "babel-preset-react": "*",
+    "jquery": "^2.0",
+    "moment": "*"
+  },
+  "devDependencies": {
+    "babel-eslint": "^4.1.4",
+    "eslint": "^1.8.0"
+  },
+  "scripts": {
+    "lint": "eslint src"
+  }
+}
