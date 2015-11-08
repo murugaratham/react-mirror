@@ -25,7 +25,7 @@ python server.py
 ```
 ### More info
 ##### Why i use node.js?
-Because i am lazy to reference other projects manually in <script> tags, and it's time for me to use some frontend dependency management tools. Just fill up `package.json` run `npm install` and all your dependencies are loaded, what more can i ask for?
+Because i am lazy to reference other projects manually in `<script>` tags, and it's time for me to use some frontend dependency management tools. Just fill up `package.json` run `npm install` and all your dependencies are loaded, what more can i ask for?
 ##### Why is there a need for python to host the server then?
 Because i only want to use node for the packages, i can and/or i might change it to node, or send me a pull request and i'll gladly accept.
 ### License
