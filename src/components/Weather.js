@@ -40,6 +40,8 @@ var Weather = React.createClass({
       if (error.message == 'User denied Geolocation')
       {
         alert('Please enable location services');
+      } else {
+        alert(error.message);
       }
     };
     
