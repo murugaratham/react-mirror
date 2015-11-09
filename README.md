@@ -11,6 +11,7 @@ And also since Evan Cohen's SmartMirror was using [forecast.io](http://forecast.
 - Add more commands and integration with Annyang
 - Customize SpeechSynthesisUtterance to have a nicer voice
 
+<a href="http://murugaratham.github.io/react-mirror" target="_blank">Try it out</a>
 
 ### Getting Started
 Use your favourite IDE, or use [Sublime Text 3](http://www.sublimetext.com/3) like i do and install the following packages globally
