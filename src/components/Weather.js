@@ -14,7 +14,7 @@ var Weather = React.createClass({
     };
   },
   getData: function (lat, lon) {    
-    return $.get('//api.openweathermap.org/data/2.5/forecast/daily?lat=' 
+    return $.get('https://localhost:8080/data/2.5/forecast/daily?lat=' 
       + lat + '&lon=' + lon + '&APPID=' + Config.WEATHER_API_KEY() + '&units=metric&cnt=7');
   },
   updateState: function (lat, lon) {

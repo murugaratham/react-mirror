@@ -1,3 +1,6 @@
 
 node_modules/*
 static/*
+localhost-cert.pem
+localhost-key.pem
+localhost.csr
