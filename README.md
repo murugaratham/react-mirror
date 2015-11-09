@@ -9,27 +9,32 @@ This project is inspired by Evan Cohen's [SmartMirror](https://github.com/evanco
 I'm taking this as an opportunity to pick up [ReactJS](https://facebook.github.io/react/), better late than never :)
 
 And also since Evan Cohen's SmartMirror was using [forecast.io](http://forecast.io/), which doesn't support metric units, i decided to hack around and use [openweather](http://www.openweathermap.com/api) instead.
-## To-do
-- ~~Make browserify "watch" source changes whenever i save~~
-- ~~Writing a simple server using node (because openweathermap doesn't support https for free accounts and running annyang on http [sucks](https://github.com/TalAter/annyang))~~
-- ~~Updating npm run script for people that just want to use http instead of https (caveat: annyang on http is slower and more problematic, if you want a performant smart mirror, please create a self-signed cert or buy a commercial one :)~~
-- Fetching RSS feeds (news, stock, etc)
-- Using localstorage to "remember" my name
-- Beautify the screen
-- Add more commands and integration with Annyang
-- Customize SpeechSynthesisUtterance to have a nicer voice
 
 ### Quick start (No SSL)
-
 Download and install [node.js](https://nodejs.org/en/)
 
-Clone project
+#### Clone project
 ```
 git clone https://github.com/murugaratham/react-mirror.git
 ```
 
+#### Get openweather API key (free)
 Sign up an account with [openweather](http://home.openweathermap.org/users/sign_in) and take note of the API_KEY and open up `src/config.js` and add in your own key
 
+```
+'use strict';
+//get your own key at openweathermap.org
+
+var Config = {
+  WEATHER_API_KEY: function() {
+    return '<insert key here>';
+  }
+} ;
+
+module.exports = Config;
+```
+
+#### Get the mirror running
 ```
 npm install
 npm run start-no-ssl
@@ -78,6 +83,16 @@ npm run start //<-- npm script which will build and start the server
 ```
 
 ### More info
+#### To-do
+- ~~Make browserify "watch" source changes whenever i save~~
+- ~~Writing a simple server using node (because openweathermap doesn't support https for free accounts and running annyang on http [sucks](https://github.com/TalAter/annyang))~~
+- ~~Updating npm run script for people that just want to use http instead of https (caveat: annyang on http is slower and more problematic, if you want a performant smart mirror, please create a self-signed cert or buy a commercial one :)~~
+- Fetching RSS feeds (news, stock, etc)
+- Using localstorage to "remember" my name
+- Beautify the screen
+- Add more commands and integration with Annyang
+- Customize SpeechSynthesisUtterance to have a nicer voice
+
 #### ~~Why i use node.js?~~
 ~~Because i am lazy to reference other projects manually in `<script>` tags, and it's time for me to use some frontend dependency management tools. Just fill up `package.json` run `npm install` and all your dependencies are loaded, what more can i ask for?~~
 #### ~~Why is there a need for python to host the server then?~~
