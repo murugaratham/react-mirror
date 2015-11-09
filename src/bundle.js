@@ -31440,11 +31440,15 @@ ValueTransformer.prototype.getTransformedValue = function (value) {
 module.exports = ValueTransformer;
 
 },{}],162:[function(require,module,exports){
+'use strict'
 //get your own key at openweathermap.org
 //please dont abuse my key :(
-var WEATHER_API_KEY = 'd68c75659899eee4d28acd50158c8d3f';
+;
+var WEATHER_API_KEY = function () {
+  return 'd68c75659899eee4d28acd50158c8d3f';
+};
 
-module.exports = WEATHER_API_KEY;
+module.exports = Config;
 
 },{}],163:[function(require,module,exports){
 'use strict';
@@ -31529,7 +31533,7 @@ module.exports = Say;
 
 var React = require('react');
 var $ = require('jquery');
-var WEATHER_API_KEY = require('../Utils/config');
+var Config = require('../Utils/config');
 var Moment = require('moment');
 
 var Weather = React.createClass({
@@ -31541,7 +31545,7 @@ var Weather = React.createClass({
     };
   },
   getData: function (lat, lon) {
-    return $.get('http://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&APPID=' + WEATHER_API_KEY + '&units=metric&cnt=7');
+    return $.get('http://api.openweathermap.org/data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&APPID=' + Config.WEATHER_API_KEY() + '&units=metric&cnt=7');
   },
   updateState: function (lat, lon) {
     this.getData(lat, lon).then((function (data) {

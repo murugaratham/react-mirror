@@ -2,7 +2,7 @@
 
 var React           = require('react');
 var $               = require('jquery');
-var WEATHER_API_KEY = require('../Utils/config');
+var Config = require('../Utils/config');
 var Moment          = require('moment');
 
 var Weather = React.createClass({
@@ -15,7 +15,7 @@ var Weather = React.createClass({
   },
   getData: function (lat, lon) {    
     return $.get('http://api.openweathermap.org/data/2.5/forecast/daily?lat=' 
-      + lat + '&lon=' + lon + '&APPID=' + WEATHER_API_KEY + '&units=metric&cnt=7');
+      + lat + '&lon=' + lon + '&APPID=' + Config.WEATHER_API_KEY() + '&units=metric&cnt=7');
   },
   updateState: function (lat, lon) {
     this.getData(lat, lon)
