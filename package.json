@@ -3,6 +3,18 @@
   "description": "Smart mirror using ReactJS",
   "version": "0.0.1",
   "private": true,
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "react"
+          ]
+        }
+      ]
+    ]
+  },
   "dependencies": {
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
@@ -14,9 +26,25 @@
   },
   "devDependencies": {
     "babel-eslint": "^4.1.4",
-    "eslint": "^1.8.0"
+    "browserify": "^12.0.1",
+    "catw": "~0.0.1",
+    "eslint": "^1.8.0",
+    "eslint-plugin-react": "^3.8.0",
+    "parcelify": "^2.1.0",
+    "tap": "~0.4.4",
+    "uglifyjs": "^2.3.6",
+    "watchify": "^3.6.0"
   },
   "scripts": {
-    "lint": "eslint src"
+    "build-js": "browserify src/main.js -o static/bundle.js",
+    "build-css": "cat css/*.css > static/bundle.css",
+    "build": "npm run build-js && npm run build-css",
+    "watch-js": "watchify src/main.js -o static/bundle.js -v",
+    "watch-css": "catw css/*.css -o static/bundle.css -v",
+    "watch": "npm run watch-js & npm run watch-css",
+    "start": "npm run build && python server.py",
+    "start-dev": "npm run watch && npm start",
+    "lint": "eslint src",
+    "clean": "rm -r static/*"
   }
 }

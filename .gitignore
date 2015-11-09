@@ -1,2 +1,4 @@
 
 node_modules/*
+css/bundle.css
+src/bundle.js

@@ -28,7 +28,7 @@ var SmartMirror = React.createClass({
         $('.weather').toggle();
       };
       var greetings = function(name) {
-        Say('Hi ' + name + ', nice to meet you!');
+        Say('Hi ' + name + ', nice to meet you?');
       };
     }
     var commands = {
