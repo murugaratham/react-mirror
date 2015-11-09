@@ -35,6 +35,12 @@ npm install
 npm run start-no-ssl
 ```
 
+### Mirror commands
+- Show weather
+- Hide weather
+- My name is Gary
+- (More coming soon)
+
 ### Getting Started (Recommended)
 
 [Why SSL?](https://github.com/TalAter/annyang#annyang-would-like-to-use-your-microphone)
