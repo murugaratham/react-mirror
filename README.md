@@ -10,6 +10,7 @@ And also since Evan Cohen's SmartMirror was using [forecast.io](http://forecast.
 ## To-do
 - ~~Make browserify "watch" source changes whenever i save~~
 - ~~Writing a simple server using node (because openweathermap doesn't support https for free accounts and running annyang on http [sucks](https://github.com/TalAter/annyang))~~
+- Updating npm run script for people that just want to use http instead of https (caveat: annyang on http is slower and more problematic, if you want a performant smart mirror, please create a self-signed cert or buy a commercial one :)
 - Using localstorage to "remember" my name
 - Beautify the screen
 - Add more commands and integration with Annyang
