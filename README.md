@@ -3,6 +3,8 @@
 
 ##<a href="http://murugaratham.github.io/react-mirror" target="_blank">Demo</a>
 
+<img src="http://i67.tinypic.com/5v7kpk.jpg" border="0" alt="Image and video hosting by TinyPic" />
+
 This project is inspired by Evan Cohen's [SmartMirror](https://github.com/evancohen/smart-mirror) which in turn was inspired by the respective projects [HomeMirror](https://github.com/HannahMitt/HomeMirror) and Michael Teeuw's [Magic Mirror](http://michaelteeuw.nl/tagged/magicmirror). 
 I'm taking this as an opportunity to pick up [ReactJS](https://facebook.github.io/react/), better late than never :)
 
@@ -10,13 +12,15 @@ And also since Evan Cohen's SmartMirror was using [forecast.io](http://forecast.
 ## To-do
 - ~~Make browserify "watch" source changes whenever i save~~
 - ~~Writing a simple server using node (because openweathermap doesn't support https for free accounts and running annyang on http [sucks](https://github.com/TalAter/annyang))~~
-- Updating npm run script for people that just want to use http instead of https (caveat: annyang on http is slower and more problematic, if you want a performant smart mirror, please create a self-signed cert or buy a commercial one :)
+- ~~Updating npm run script for people that just want to use http instead of https (caveat: annyang on http is slower and more problematic, if you want a performant smart mirror, please create a self-signed cert or buy a commercial one :)~~
+- Fetching RSS feeds (news, stock, etc)
 - Using localstorage to "remember" my name
 - Beautify the screen
 - Add more commands and integration with Annyang
 - Customize SpeechSynthesisUtterance to have a nicer voice
 
-### Getting Started
+### Quick start (No SSL)
+
 Download and install [node.js](https://nodejs.org/en/)
 
 Clone project
@@ -25,6 +29,15 @@ git clone https://github.com/murugaratham/react-mirror.git
 ```
 
 Sign up an account with [openweather](http://home.openweathermap.org/users/sign_in) and take note of the API_KEY and open up `src/config.js` and add in your own key
+
+```
+npm install
+npm run start-no-ssl
+```
+
+### Getting Started (Recommended)
+
+[Why SSL?](https://github.com/TalAter/annyang#annyang-would-like-to-use-your-microphone)
 
 Generate self-signed certs (OSX)
 ```
@@ -59,11 +72,14 @@ npm run start //<-- npm script which will build and start the server
 ```
 
 ### More info
-##### ~~Why i use node.js?~~
+#### ~~Why i use node.js?~~
 ~~Because i am lazy to reference other projects manually in `<script>` tags, and it's time for me to use some frontend dependency management tools. Just fill up `package.json` run `npm install` and all your dependencies are loaded, what more can i ask for?~~
-##### ~~Why is there a need for python to host the server then?~~
+#### ~~Why is there a need for python to host the server then?~~
 ~~Because i only want to use node for the packages, i can and/or i might change it to node, or send me a pull request and i'll gladly accept.~~
-##### [http-server](https://github.com/indexzero/http-server) was the ideal package for react-mirror
+#### [http-server](https://github.com/indexzero/http-server) was the ideal package for react-mirror
 Firstly, it lived up to it's name of simple, zero-configuration command-line http server. And it also made my life much easier by being able to proxy requests that can't be resolved locally. Thanks [indexzero](https://github.com/indexzero)!
+
+### I need css help!
+I need people with a eye for design to make the UI more appealing, it looks boring now
 ### License
 [WTFPL](http://www.wtfpl.net/)

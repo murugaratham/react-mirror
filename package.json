@@ -45,6 +45,7 @@
     "watch-css": "catw css/*.css -o static/bundle.css -v",
     "watch": "npm run watch-js & npm run watch-css",
     "start": "npm run build && node node_modules/http-server/bin/http-server -P 'http://api.openweathermap.org' --ssl -C 'localhost-cert.pem' -K 'localhost-key.pem'",
+    "start-no-ssl": "npm run build && node node_modules/http-server/bin/http-server -P 'http://api.openweathermap.org' -C 'localhost-cert.pem' -K 'localhost-key.pem'",
     "start-dev": "npm run watch && npm run start",
     "lint": "eslint src",
     "clean": "rm -r static/*"
