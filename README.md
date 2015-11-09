@@ -14,17 +14,13 @@ And also since Evan Cohen's SmartMirror was using [forecast.io](http://forecast.
 <a href="http://murugaratham.github.io/react-mirror" target="_blank">Try it out</a>
 
 ### Getting Started
-Use your favourite IDE, or use [Sublime Text 3](http://www.sublimetext.com/3) like i do and install the following packages globally
-* babel-cli
-* browserify
+Use your favourite IDE, or use [Sublime Text 3](http://www.sublimetext.com/3) 
 
 Sign up an account with [openweather](http://home.openweathermap.org/users/sign_in) and replace config.js with your own API_KEY.
 
-Install Node.js, run `npm install` to download the dependencies, then start the server.
 ```
 npm install
-browserify -t [ babelify --presets [ react ] ] src/main.js -o src/bundle.js
-python server.py
+npm run start
 ```
 ### More info
 ##### Why i use node.js?
