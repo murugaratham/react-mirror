@@ -1,98 +1,16 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html>
   <head>
-    <meta charset="UTF-8">
-    <title>React-mirror by murugaratham</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <meta charset="UTF-8" />
+    <title>Smart Mirror!</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600,800,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/weather-icons.min.css" />
   </head>
   <body>
-    <section class="page-header">
-      <h1 class="project-name">React-mirror</h1>
-      <h2 class="project-tagline">Smart mirror using ReactJS</h2>
-      <a href="https://github.com/murugaratham/react-mirror" class="btn">View on GitHub</a>
-      <a href="https://github.com/murugaratham/react-mirror/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/murugaratham/react-mirror/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
-
-    <section class="main-content">
-      <h1>
-<a id="react-mirror" class="anchor" href="#react-mirror" aria-hidden="true"><span class="octicon octicon-link"></span></a>React Mirror</h1>
-
-<p>This project is inspired by Evan Cohen's <a href="https://github.com/evancohen/smart-mirror">SmartMirror</a> which in turn was inspired by the respective projects <a href="https://github.com/HannahMitt/HomeMirror">HomeMirror</a> and Michael Teeuw's <a href="http://michaelteeuw.nl/tagged/magicmirror">Magic Mirror</a>. 
-I'm taking this as an opportunity to pick up <a href="https://facebook.github.io/react/">ReactJS</a>, better late than never :)</p>
-
-<p>And also since Evan Cohen's SmartMirror was using <a href="http://forecast.io/">forecast.io</a>, which doesn't support metric units, i decided to hack around and use <a href="http://www.openweathermap.com/api">openweather</a> instead.</p>
-
-<h2>
-<a id="to-do" class="anchor" href="#to-do" aria-hidden="true"><span class="octicon octicon-link"></span></a>To-do</h2>
-
-<ul>
-<li>Make browserify "watch" source changes whenever i save</li>
-<li>Using localstorage to "remember" my name</li>
-<li>Beautify the screen</li>
-<li>Add more commands and integration with Annyang</li>
-<li>Customize SpeechSynthesisUtterance to have a nicer voice</li>
-</ul>
-
-<h3>
-<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h3>
-
-<p>Use your favourite IDE, or use <a href="http://www.sublimetext.com/3">Sublime Text 3</a> like i do and install the following packages globally</p>
-
-<ul>
-<li>babel-cli</li>
-<li>browserify</li>
-</ul>
-
-<p>Sign up an account with <a href="http://home.openweathermap.org/users/sign_in">openweather</a> and replace config.js with your own API_KEY.</p>
-
-<p>Install Node.js, run <code>npm install</code> to download the dependencies, then start the server.</p>
-
-<pre><code>npm install
-browserify -t [ babelify --presets [ react ] ] src/main.js -o src/bundle.js
-python server.py
-</code></pre>
-
-<h3>
-<a id="more-info" class="anchor" href="#more-info" aria-hidden="true"><span class="octicon octicon-link"></span></a>More info</h3>
-
-<h5>
-<a id="why-i-use-nodejs" class="anchor" href="#why-i-use-nodejs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why i use node.js?</h5>
-
-<p>Because i am lazy to reference other projects manually in <code>&lt;script&gt;</code> tags, and it's time for me to use some frontend dependency management tools. Just fill up <code>package.json</code> run <code>npm install</code> and all your dependencies are loaded, what more can i ask for?</p>
-
-<h5>
-<a id="why-is-there-a-need-for-python-to-host-the-server-then" class="anchor" href="#why-is-there-a-need-for-python-to-host-the-server-then" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why is there a need for python to host the server then?</h5>
-
-<p>Because i only want to use node for the packages, i can and/or i might change it to node, or send me a pull request and i'll gladly accept.</p>
-
-<h3>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h3>
-
-<p><a href="http://www.wtfpl.net/">WTFPL</a></p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/murugaratham/react-mirror">React-mirror</a> is maintained by <a href="https://github.com/murugaratham">murugaratham</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-            <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-25044811-3");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
-
+    <div id="container" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.0.0/annyang.min.js"></script>
+    <script src="src/bundle.js"></script>
   </body>
 </html>
