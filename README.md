@@ -26,19 +26,20 @@ git clone https://github.com/murugaratham/react-mirror.git
 ```
 
 #### Get openweather API key (free)
-Sign up an account with [openweather](http://home.openweathermap.org/users/sign_in) and take note of the API_KEY and open up `src/config.js` and add in your own key
+Sign up an account with [openweather](http://home.openweathermap.org/users/sign_in) and take note of the API_KEY and open up `src/Utils/Constants.js` and add in your own key. You can also customise the date and time format, which is done by [moment.js formatting](http://momentjs.com/docs/#/displaying/)
+
+The other constant values are self-explainatory, tweak as you like
 
 ```
-'use strict';
-//get your own key at openweathermap.org
+var Constants = {
+  WEATHER_API_KEY  : 'd68c75659899eee4d28acd50158c8d3f',
+  TIME_FORMAT      : 'h:mm:ss a',
+  DATE_FORMAT      : 'ddd, MMMM D YYYY',
+  FEED_INTERVAL    : 1000 * 60 * 5,
+  FEED_URL         : 'http://news.yahoo.com/rss/',
+  WEATHER_INTERVAL : 1000 * 60 * 60
+}
 
-var Config = {
-  WEATHER_API_KEY: function() {
-    return '<insert key here>';
-  }
-} ;
-
-module.exports = Config;
 ```
 
 #### Get the mirror running
@@ -88,20 +89,17 @@ npm run start //<-- npm script which will build and start the server
 - ~~Make browserify "watch" source changes whenever i save~~
 - ~~Writing a simple server using node (because openweathermap doesn't support https for free accounts and running annyang on http [sucks](https://github.com/TalAter/annyang))~~
 - ~~Updating npm run script for people that just want to use http instead of https (caveat: annyang on http is slower and more problematic, if you want a performant smart mirror, please create a self-signed cert or buy a commercial one :)~~
-- Fetching RSS feeds (news, stock, etc)
+- ~~Fetching RSS feeds (news, stock, etc)~~
+- Beautify the screen (I need help here..)
 - Using localstorage to "remember" my name
-- Beautify the screen
 - Add more commands and integration with Annyang
 - Customize SpeechSynthesisUtterance to have a nicer voice
 
-#### ~~Why i use node.js?~~
-~~Because i am lazy to reference other projects manually in `<script>` tags, and it's time for me to use some frontend dependency management tools. Just fill up `package.json` run `npm install` and all your dependencies are loaded, what more can i ask for?~~
-#### ~~Why is there a need for python to host the server then?~~
-~~Because i only want to use node for the packages, i can and/or i might change it to node, or send me a pull request and i'll gladly accept.~~
 #### [http-server](https://github.com/indexzero/http-server) was the ideal package for react-mirror
 Firstly, it lived up to it's name of simple, zero-configuration command-line http server. And it also made my life much easier by being able to proxy requests that can't be resolved locally. Thanks [indexzero](https://github.com/indexzero)!
 
 ### I need css help!
 I need people with a eye for design to make the UI more appealing, it looks boring now
+
 ### License
 [WTFPL](http://www.wtfpl.net/)

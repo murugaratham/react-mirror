@@ -8,17 +8,18 @@ var React             = require('react'),
     Calendar          = require('./components/Calendar'),
     Weather           = require('./components/Weather'),
     Say               = require('./components/Speech'),
-    Feed              = require('./components/RSS/YahooFeeds'),
-    ValueTransformer  = require('./Utils/ValueTransformer');
+    Feed              = require('./components/RSS'),
+    ValueTransformer  = require('./Utils/ValueTransformer'),
+    Constants         = require('./Utils/Constants');
 
 //time transformer
 var timeTransform = new ValueTransformer(function (date) {
-  return moment(date).format('h:mm:ss a');
+  return moment(date).format(Constants.TIME_FORMAT);
 });
 
 //date transformer
 var dateTransform = new ValueTransformer(function (date) {
-  return moment(date).format('dddd, MMMM D YYYY');
+  return moment(date).format(Constants.DATE_FORMAT);
 });
 
 //main app
@@ -40,30 +41,18 @@ var SmartMirror = React.createClass({
     annyang.addCommands(commands);
     annyang.start();
   },
-  displayName: 'Smart Mirror',
   render: function() {
     return (
-      <div className="top">
-        <Today />
-        <Feeds />
-        <div className="top-right">
-          <div className="weather">
-            <Weather />
-          </div>
+      <div className="row">
+        <div className="col-xs-9">        
+          <Calendar dateTransform={dateTransform}/>
+          <Clock dateTransform={timeTransform}/>
+          <Feeds />
+        </div>   
+        <div className="col-xs-3">
+          <Weather pollInterval={Constants.WEATHER_INTERVAL}/>
         </div>
       </div>
-    );
-  }
-});
-
-var Today = React.createClass({ 
-  displayName: 'Today',
-  render: function() {
-    return (
-      <div className="top-left">        
-        <Calendar dateTransform={dateTransform}/>
-        <Clock dateTransform={timeTransform}/>
-      </div>      
     );
   }
 });
@@ -72,8 +61,11 @@ var Feeds = React.createClass({
   displayName: 'Feeds',
   render: function() {
     return (
-      <div className="top-left">
-        <Feed url="http://news.yahoo.com/rss/" />
+      <div className="feeds">
+        <a href="https://www.yahoo.com/?ilc=401" target="_blank">
+          <img src="https://poweredby.yahoo.com/white.png" width="134" height="29"/>
+        </a>
+        <Feed url={Constants.FEED_URL} pollInterval={Constants.FEED_INTERVAL}/>
       </div>
     )
   }

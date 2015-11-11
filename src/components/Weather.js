@@ -2,8 +2,8 @@
 
 var React           = require('react'),
     $               = require('jquery'),
-    Config          = require('../Utils/config'),
-    Moment          = require('moment');
+    Moment          = require('moment'),
+    Constants       = require('../Utils/Constants');
 
 var Weather = React.createClass({
   getInitialState: function () {
@@ -15,7 +15,7 @@ var Weather = React.createClass({
   },
   getData: function (lat, lon) {    
     return $.get('data/2.5/forecast/daily?lat=' 
-      + lat + '&lon=' + lon + '&APPID=' + Config.WEATHER_API_KEY() + '&units=metric&cnt=7');
+      + lat + '&lon=' + lon + '&APPID=' + Constants.WEATHER_API_KEY + '&units=metric&cnt=7');
   },
   updateState: function (lat, lon) {
     this.getData(lat, lon)
@@ -29,11 +29,10 @@ var Weather = React.createClass({
         }
       }.bind(this));      
   },  
-  geolocationSearch: function () {    
-    /// Successful geolocation
+  geolocationSearch: function () {
     var success = function (position) {
       var lat = position.coords.latitude;
-      var lon = position.coords.longitude;      
+      var lon = position.coords.longitude;
       this.updateState(lat, lon);
     }.bind(this);
     var error = function (error) {
@@ -50,6 +49,7 @@ var Weather = React.createClass({
   },
   componentDidMount: function () {   
     this.geolocationSearch();
+    setInterval(this.loadFeedFromServer, this.props.pollInterval);
   },
   render: function() {
     return (        
