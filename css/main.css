@@ -9,15 +9,6 @@ body {
   position: relative;
 }
 
-/* Colors */
-.light-grey {
-  color: #ccc;
-}
-
-.grey {
-  color: #999;
-}
-
 .date {
   font-family: 'HelveticaNeue-UltraLight';
   font-size: 42px;

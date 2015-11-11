@@ -6,12 +6,17 @@ var React       = require('react'),
 
 var Feed = React.createClass({
     getInitialState: function () {
-        return { feed: { entries: [] } };
+        return { 
+          feed: { 
+            entries: [] 
+          }, 
+          isWithinViewPort: false
+        };
     },
-    componentDidMount: function() {
+    componentDidMount: function () {
       this.loadFeedFromServer();
       setInterval(this.loadFeedFromServer, this.props.pollInterval);
-    },    
+    },
     loadFeedFromServer: function () {
         GetFeed(this.props.url, function (err, feed) {
           if(err) return alert('error loading feed');
@@ -21,22 +26,20 @@ var Feed = React.createClass({
         }.bind(this));
     },
     render: function () {
-        return (
-            <ul id="js-news" className="js-hidden">
-                {this.state.feed.entries.map(function (entry, i) {
-                    return <FeedItem key={i} entry={entry} />
-                })}
-            </ul>
-        );
+      return (
+        <ul className="newsticker" ref="feeds">
+            {this.state.feed.entries.map(function (entry, i) {
+                return <FeedItem key={i} entry={entry} />
+            })}
+        </ul>
+      );
     }
 });
 
 var FeedItem = React.createClass({
   render: function () {
     return (
-      <li className="news-item">
-        <div> {this.props.entry.title} </div>       
-      </li>
+      <li>{this.props.entry.title}</li>
     );
   }
 });

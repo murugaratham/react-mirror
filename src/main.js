@@ -61,7 +61,7 @@ var Feeds = React.createClass({
   displayName: 'Feeds',
   render: function() {
     return (
-      <div className="feeds">
+      <div>
         <a href="https://www.yahoo.com/?ilc=401" target="_blank">
           <img src="https://poweredby.yahoo.com/white.png" width="134" height="29"/>
         </a>
