@@ -3,6 +3,13 @@
 
 ##<a href="http://murugaratham.github.io/react-mirror" target="_blank">Demo</a>
 
+
+### Mirror commands
+- Show weather
+- Hide weather
+- My name is Gary (or your name)
+- (More coming soon)
+
 <img src="http://i67.tinypic.com/5v7kpk.jpg" border="0" alt="Image and video hosting by TinyPic" />
 
 This project is inspired by Evan Cohen's [SmartMirror](https://github.com/evancohen/smart-mirror) which in turn was inspired by the respective projects [HomeMirror](https://github.com/HannahMitt/HomeMirror) and Michael Teeuw's [Magic Mirror](http://michaelteeuw.nl/tagged/magicmirror). 
@@ -39,12 +46,6 @@ module.exports = Config;
 npm install
 npm run start-no-ssl
 ```
-
-### Mirror commands
-- Show weather
-- Hide weather
-- My name is Gary
-- (More coming soon)
 
 ### Getting Started (Recommended)
 

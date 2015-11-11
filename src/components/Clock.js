@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react');
-var ValueTransformer = require('../Utils/ValueTransformer');
+var React = require('react'),
+    ValueTransformer = require('../Utils/ValueTransformer');
 
 var Clock = React.createClass({
   getInitialState: function() {

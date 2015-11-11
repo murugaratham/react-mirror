@@ -1,14 +1,15 @@
 'use strict';
 
-var React             = require('react');
-var ReactDOM          = require('react-dom');
-var $                 = require('jquery');
-var moment            = require('moment');
-var Clock             = require('./components/Clock');
-var Calendar          = require('./components/Calendar');
-var Weather           = require('./components/Weather');
-var Say               = require('./components/Speech');
-var ValueTransformer  = require('./Utils/ValueTransformer');
+var React             = require('react'),
+    ReactDOM          = require('react-dom'),
+    $                 = require('jquery'),
+    moment            = require('moment'),
+    Clock             = require('./components/Clock'),
+    Calendar          = require('./components/Calendar'),
+    Weather           = require('./components/Weather'),
+    Say               = require('./components/Speech'),
+    Feed              = require('./components/RSS/YahooFeeds'),
+    ValueTransformer  = require('./Utils/ValueTransformer');
 
 //time transformer
 var timeTransform = new ValueTransformer(function (date) {
@@ -22,6 +23,7 @@ var dateTransform = new ValueTransformer(function (date) {
 
 //main app
 var SmartMirror = React.createClass({
+  displayName: 'SmartMirror',
   componentDidMount: function() {
     if(annyang) {
       var toggleWeather = function() {
@@ -44,6 +46,7 @@ var SmartMirror = React.createClass({
     return (
       <div className="top">
         <Today />
+        <Feeds />
         <div className="top-right">
           <div className="weather">
             <Weather />
@@ -66,6 +69,17 @@ var Today = React.createClass({
   }
 });
 
+var Feeds = React.createClass({
+  displayName: 'Feeds',
+  render: function() {
+    return (
+      <div className="top-left">
+        <Feed url="http://news.yahoo.com/rss/" />
+      </div>
+    )
+  }
+});
+
 ReactDOM.render(
-  <SmartMirror />, $('#container').get(0)
+  <SmartMirror />, $('.container').get(0)
 );

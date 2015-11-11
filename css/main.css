@@ -42,41 +42,12 @@ dt {
 	z-index: 999;
 }
 
-.container {
-	z-index: -1; /* so things are still selectable */
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	height: 100%;
-}
-
-.top-left{
-  float: left;
-}
-
 .date {
   font-size: 42px;
 }
 
 .time {
   font-size: 110px;
-}
-
-.top-right {
-  float: right;
-}
-
-.commands {
-  width: 450px;
-  text-align: left;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .weather {

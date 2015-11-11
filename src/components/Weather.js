@@ -1,9 +1,9 @@
 'use strict';
 
-var React           = require('react');
-var $               = require('jquery');
-var Config = require('../Utils/config');
-var Moment          = require('moment');
+var React           = require('react'),
+    $               = require('jquery'),
+    Config          = require('../Utils/config'),
+    Moment          = require('moment');
 
 var Weather = React.createClass({
   getInitialState: function () {
