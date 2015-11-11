@@ -32,7 +32,7 @@ The other constant values are self-explainatory, tweak as you like
 
 ```
 var Constants = {
-  WEATHER_API_KEY  : 'd68c75659899eee4d28acd50158c8d3f',
+  WEATHER_API_KEY  : '',
   TIME_FORMAT      : 'h:mm:ss a',
   DATE_FORMAT      : 'ddd, MMMM D YYYY',
   FEED_INTERVAL    : 1000 * 60 * 5,
