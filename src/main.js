@@ -37,7 +37,6 @@ var SmartMirror = React.createClass({
       '(hide) (show) weather': toggleWeather,
       'My name is *name': greetings
     };
-    annyang.debug();
     annyang.addCommands(commands);
     annyang.start();
   },
