@@ -14,12 +14,12 @@ var React             = require('react'),
 
 //time transformer
 var timeTransform = new ValueTransformer(function (date) {
-  return moment(date).format(Constants.TIME_FORMAT);
+  return moment(date).format(Constants.Calendar.Formats.Time);
 });
 
 //date transformer
 var dateTransform = new ValueTransformer(function (date) {
-  return moment(date).format(Constants.DATE_FORMAT);
+  return moment(date).format(Constants.Calendar.Formats.Date);
 });
 
 //main app
@@ -50,7 +50,7 @@ var SmartMirror = React.createClass({
           <Feeds />
         </div>   
         <div className="col-xs-3">
-          <Weather pollInterval={Constants.WEATHER_INTERVAL}/>
+          <Weather pollInterval={Constants.Weather.RefreshInterval}/>
         </div>
       </div>
     );
@@ -67,7 +67,7 @@ var Feeds = React.createClass({
             <img src="https://poweredby.yahoo.com/white.png" width="134" height="29"/>
           </a>
         </span>
-        <Feed url={Constants.FEED_URL} pollInterval={Constants.FEED_INTERVAL}/>
+        <Feed url={Constants.Feed.Url} pollInterval={Constants.Feed.RefreshInterval}/>
       </div>
     )
   }

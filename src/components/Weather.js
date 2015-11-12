@@ -15,7 +15,7 @@ var Weather = React.createClass({
   },
   getData: function (lat, lon) {    
     return $.get('data/2.5/forecast/daily?lat=' 
-      + lat + '&lon=' + lon + '&APPID=' + Constants.WEATHER_API_KEY + '&units=metric&cnt=7');
+      + lat + '&lon=' + lon + '&APPID=' + Constants.Weather.ApiKey + '&units=metric&cnt=7');
   },
   updateState: function (lat, lon) {
     this.getData(lat, lon)
@@ -30,7 +30,7 @@ var Weather = React.createClass({
       }.bind(this));      
   },  
   geolocationSearch: function () {
-    var latlon = Constants.DEFAULT_LOCATION;
+    var latlon = Constants.Weather.DefaultLocation;
     var lat = latlon[0];
     var lon = latlon[1];
     var success = function (position) {
