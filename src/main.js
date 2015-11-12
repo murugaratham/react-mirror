@@ -62,9 +62,11 @@ var Feeds = React.createClass({
   render: function() {
     return (
       <div>
-        <a href="https://www.yahoo.com/?ilc=401" target="_blank">
-          <img src="https://poweredby.yahoo.com/white.png" width="134" height="29"/>
-        </a>
+        <span>
+          <a href="https://www.yahoo.com/?ilc=401" target="_blank">
+            <img src="https://poweredby.yahoo.com/white.png" width="134" height="29"/>
+          </a>
+        </span>
         <Feed url={Constants.FEED_URL} pollInterval={Constants.FEED_INTERVAL}/>
       </div>
     )

@@ -30,24 +30,21 @@ var Weather = React.createClass({
       }.bind(this));      
   },  
   geolocationSearch: function () {
+    var latlon = Constants.DEFAULT_LOCATION;
+    var lat = latlon[0];
+    var lon = latlon[1];
     var success = function (position) {
-      var lat = position.coords.latitude;
-      var lon = position.coords.longitude;
+      lat = position.coords.latitude;
+      lon = position.coords.longitude;
       this.updateState(lat, lon);
     }.bind(this);
     var error = function (error) {
-      if (error.message == 'User denied Geolocation')
-      {
-        alert('Please enable location services');
-      } else {
-        alert(error.message);
-      }
-    };
-    
-    /// Get the position
+      console.log('There was an error getting your position:' + error);
+      //this.updateState(lat, lon);
+    }.bind(this);
     navigator.geolocation.getCurrentPosition(success, error);
   },
-  componentDidMount: function () {   
+  componentDidMount: function () { 
     this.geolocationSearch();
     setInterval(this.loadFeedFromServer, this.props.pollInterval);
   },
@@ -58,8 +55,7 @@ var Weather = React.createClass({
         country={this.state.country}
         city={this.state.city}/>
     );
-  }
-  
+  }  
 });
 
 var WeatherContainer = React.createClass({  
@@ -73,7 +69,7 @@ var WeatherContainer = React.createClass({
               <WeatherDetails data={weather} />
             </div>
           })}
-        </div>      
+        </div>
       </div>
     )
   }  
@@ -111,8 +107,8 @@ var WeatherDetails = React.createClass({
         <i className={icon}/>
         <span className="info">{this.capitalizeFirstLetter(weatherType)}</span>
         <div className="temperature">
-          {Math.round(temperature)} °C          
-        </div>        
+          {Math.round(temperature)} °C
+        </div>
       </div>
     )
   }
