@@ -1,8 +1,8 @@
 'use strict';
 
 var React           = require('react'),
-    $               = require('jquery'),
     Moment          = require('moment'),
+    $               = require('jquery'),
     Constants       = require('../Utils/Constants');
 
 var Weather = React.createClass({
@@ -49,7 +49,7 @@ var Weather = React.createClass({
     setInterval(this.loadFeedFromServer, this.props.pollInterval);
   },
   render: function() {
-    return (        
+    return (
       <WeatherContainer 
         weekWeather={this.state.weekWeather}
         country={this.state.country}
@@ -64,10 +64,12 @@ var WeatherContainer = React.createClass({
       <div className="week-container">   
         <span className="country">{this.props.city}{this.props.country ? `, ${this.props.country}` : null}</span> 
         <div className="week-all-days">
-          {$.map(this.props.weekWeather, (weather, i) => {
-            return <div key={i} className="week-one-day">
-              <WeatherDetails data={weather} />
-            </div>
+          {this.props.weekWeather.map(function (weather, i) {
+            return (
+              <div key={i} className="week-one-day">
+                <WeatherDetails data={weather} />
+              </div>
+            )
           })}
         </div>
       </div>

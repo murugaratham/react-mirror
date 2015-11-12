@@ -21,16 +21,16 @@
     "react-intl": "1.2.0",
     "babel-preset-react": "*",
     "jquery": "^2.0",
-    "moment": "*"
+    "moment": "*",
+    "http-server": "^0.8.5",
+    "browserify": "^12.0.1",    
+    "react-css-transition-replace": "^1.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.4",
-    "browserify": "^12.0.1",
     "catw": "~0.0.1",
     "eslint": "^1.8.0",
     "eslint-plugin-react": "^3.8.0",
-    "http-proxy": "^1.12.0",
-    "http-server": "^0.8.5",
     "parcelify": "^2.1.0",
     "tap": "~0.4.4",
     "uglifyjs": "^2.3.6",
