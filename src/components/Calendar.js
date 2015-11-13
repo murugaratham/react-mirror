@@ -1,7 +1,8 @@
 'use strict';
 
-var React            = require('react'),
-    ValueTransformer = require('../Utils/ValueTransformer');
+var React     = require('react'),
+    Constants = require('../Utils/Constants'),
+    moment    = require('moment');
 
 var Calendar = React.createClass({
   getInitialState: function() {
@@ -18,7 +19,7 @@ var Calendar = React.createClass({
     }());
   },
   getDate: function () {
-    return this.props.dateTransform.getTransformedValue(this.props.date);
+    return moment(this.state.date).format(Constants.Calendar.Formats.Date);
   },
   render: function() {
     return(

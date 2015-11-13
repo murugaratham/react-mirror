@@ -2,77 +2,40 @@
 
 var React             = require('react'),
     ReactDOM          = require('react-dom'),
-    $                 = require('jquery'),
     moment            = require('moment'),
+    ReactBS           = require('react-bootstrap'),
+    Grid              = ReactBS.Grid,
+    Row               = ReactBS.Row,
+    Col               = ReactBS.Col,
     Clock             = require('./components/Clock'),
     Calendar          = require('./components/Calendar'),
     Weather           = require('./components/Weather'),
-    Say               = require('./components/Speech'),
     Feed              = require('./components/RSS'),
-    ValueTransformer  = require('./Utils/ValueTransformer'),
+    Jarvis            = require('./Utils/Jarvis'),
     Constants         = require('./Utils/Constants');
-
-//time transformer
-var timeTransform = new ValueTransformer(function (date) {
-  return moment(date).format(Constants.Calendar.Formats.Time);
-});
-
-//date transformer
-var dateTransform = new ValueTransformer(function (date) {
-  return moment(date).format(Constants.Calendar.Formats.Date);
-});
 
 //main app
 var SmartMirror = React.createClass({
   displayName: 'SmartMirror',
   componentDidMount: function() {
-    if(annyang) {
-      var toggleWeather = function() {
-        $('.weather').toggle();
-      };
-      var greetings = function(name) {
-        Say('Hi ' + name + ', nice to meet you?');
-      };
-    }
-    var commands = {
-      '(hide) (show) weather': toggleWeather,
-      'My name is *name': greetings
-    };
-    annyang.addCommands(commands);
-    annyang.start();
+    Jarvis.init();
   },
   render: function() {
     return (
-      <div className="row">
-        <div className="col-xs-9">        
-          <Calendar dateTransform={dateTransform}/>
-          <Clock dateTransform={timeTransform}/>
-          <Feeds />
-        </div>   
-        <div className="col-xs-3">
-          <Weather pollInterval={Constants.Weather.RefreshInterval}/>
-        </div>
-      </div>
+      <Grid>
+        <Row>
+          <Col xs={9}>
+            <Calendar />
+            <Clock />
+            <Feed url={Constants.Feed.Url} pollInterval={Constants.Feed.RefreshInterval} />
+          </Col>
+          <Col xs={3}>
+            <Weather pollInterval={Constants.Weather.RefreshInterval}/>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 });
 
-var Feeds = React.createClass({
-  displayName: 'Feeds',
-  render: function() {
-    return (
-      <div>
-        <span>
-          <a href="https://www.yahoo.com/?ilc=401" target="_blank">
-            <img src="https://poweredby.yahoo.com/white.png" width="134" height="29"/>
-          </a>
-        </span>
-        <Feed url={Constants.Feed.Url} pollInterval={Constants.Feed.RefreshInterval}/>
-      </div>
-    )
-  }
-});
-
-ReactDOM.render(
-  <SmartMirror />, $('.container').get(0)
-);
+ReactDOM.render(<SmartMirror />, document.getElementById('app'));

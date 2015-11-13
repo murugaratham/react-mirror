@@ -1,11 +1,12 @@
 'use strict';
 
-var React = require('react'),
-    ValueTransformer = require('../Utils/ValueTransformer');
+var React     = require('react'),
+    Constants = require('../Utils/Constants'),
+    moment    = require('moment');
 
 var Clock = React.createClass({
   getInitialState: function() {
-    return { date: new Date() };
+    return { time: new Date() };
   },
   componentDidMount: function() {
     this.start();
@@ -13,12 +14,12 @@ var Clock = React.createClass({
   start: function() {
     var self = this;
     (function tick() {
-      self.setState({ date: new Date() });
+      self.setState({ time: new Date() });
       requestAnimationFrame(tick);
     }());
   },
   getTime: function () {
-    return this.props.dateTransform.getTransformedValue(this.props.date);
+    return moment(this.state.time).format(Constants.Calendar.Formats.Time);
   },
   render: function() {
     return(

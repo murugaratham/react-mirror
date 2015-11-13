@@ -39,6 +39,10 @@ body {
   font-size: 2em;
 }
 
+span.newsticker img {
+  margin-right: 10px;
+}
+
 .fade-wait-leave {
   opacity: 1;
 }
@@ -58,4 +62,8 @@ body {
 
 .fade-wait-height {
   transition: height .6s ease-in-out;
+}
+
+.modal-content {
+  background: #4C4C4C;
 }

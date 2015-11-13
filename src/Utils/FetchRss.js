@@ -2,8 +2,10 @@
 //https://github.com/prabirshrestha/reactjs-playground/blob/master/rss-feed/client/utils/feed.js
 var $ = require('jquery');
 
-var GetFeed = function (feedUrl, callback) {
-    var url = window.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=150&callback=?&q=' + encodeURIComponent(feedUrl);
+var GetFeed2 = function (feedUrl, callback) {
+    var url = window.location.protocol 
+    + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=150&callback=?&q=' 
+    + encodeURIComponent(feedUrl);
     $.getJSON(url, function (result) {
         if(!callback) return;
         if(result.responseStatus === 200) {
@@ -13,4 +15,14 @@ var GetFeed = function (feedUrl, callback) {
         }
     });
 };
+
+var GetFeed = function (feedUrl, callback) {
+  $.ajax({
+    url: feedUrl,
+    dataType: 'jsonp',
+    success: function(res) {
+      callback(null, res.responseData.feed);
+    }
+  });
+}
 module.exports = GetFeed;
