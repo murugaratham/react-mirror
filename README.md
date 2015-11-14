@@ -5,10 +5,9 @@
 
 
 ### Mirror commands
-- Show weather
-- Hide weather
 - My name is Gary (or your name)
-- (More coming soon)
+- Wait (this will pause the news rotation)
+- Read for me (reads the news out loud, though i'm struggling to change the voice properly, since chrome loads voices asynchronously)
 
 <img src="http://oi65.tinypic.com/210naiu.jpg" border="0" alt="Image and video hosting by TinyPic" />
 

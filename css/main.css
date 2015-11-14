@@ -67,3 +67,12 @@ span.newsticker img {
 .modal-content {
   background: #4C4C4C;
 }
+
+.modal-body img {
+  max-width: 100%!important;
+  height: auto!important;
+  background-color: #f2f2f2;
+  text-align: center;
+  padding: 10px;
+  margin-bottom: .8em;
+}

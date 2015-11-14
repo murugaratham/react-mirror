@@ -11,7 +11,7 @@ var Constants = {
     DefaultLocation: [1.3, 103.8]
   },  
   Feed : {
-    Url: 'http://hr-pulsesubscriber.appspot.com/items?feed=curated://top_read_News',
+    Url: '//hr-pulsesubscriber.appspot.com/items?feed=curated://top_read_News',
     RefreshInterval : 1000 * 60 * 5,
     AppearDuration : 1000 * 5,
     FadeTransitionInterval : {

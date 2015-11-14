@@ -3,7 +3,8 @@
 var React           = require('react'),
     Moment          = require('moment'),
     $               = require('jquery'),
-    Constants       = require('../Utils/Constants');
+    Constants       = require('../Utils/Constants'),
+    Jarvis          = require('../Utils/Jarvis');
 
 var Weather = React.createClass({
   getInitialState: function () {
@@ -45,6 +46,9 @@ var Weather = React.createClass({
     navigator.geolocation.getCurrentPosition(success, error);
   },
   componentDidMount: function () { 
+    // Jarvis.addCommands('(show) (hide) weather', function() {
+    //   $('.weather').toggle();
+    // });
     this.geolocationSearch();
     setInterval(this.loadFeedFromServer, this.props.pollInterval);
   },
