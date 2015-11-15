@@ -40,15 +40,8 @@ var Feed = React.createClass({
     this.loadFeedFromServer();
     setInterval(this.loadFeedFromServer, this.props.pollInterval);
     this.startRotateFeed();
-    var commands = {
-      'wait': this.showModal,
-      'read for me': this.readCurrentArticle
-    };
-
-    annyang.addCommands(commands);
-
-    // Jarvis.addCommands('wait', this.showModal);
-    // Jarvis.addCommands('read for me', this.readCurrentArticle);
+    Jarvis.addCommands('wait', this.showModal);
+    Jarvis.addCommands('read for me', this.readCurrentArticle);
   },
   getCurrentFeed: function () {
     return this.state.feed.entries[this.state.currentFeed];
@@ -71,19 +64,18 @@ var Feed = React.createClass({
   handleClick: function () {
     this.readCurrentArticle();
   },
-  showModal: function (cb) {    
+  showModal: function (cb) {
     this.updateState({ show: true });
     this.pauseRotateFeed();
   },
-  hideModal: function () {
+  hideModal: function () {    
     this.updateState({ show: false });
     this.startRotateFeed();
   },
   readCurrentArticle: function () {
-    console.log('trying to read');
     this.showModal();
     var feed = this.getCurrentFeed();
-    console.log($(feed.content).not('style').text());
+    console.log($(feed.content).not('style').not('script').text());
     Say($(feed.content).not('style').text());
   },
   rawHtml: function () {
