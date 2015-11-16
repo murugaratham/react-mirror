@@ -2,7 +2,6 @@
 
 var React             = require('react'),
     ReactDOM          = require('react-dom'),
-    moment            = require('moment'),
     ReactBS           = require('react-bootstrap'),
     Grid              = ReactBS.Grid,
     Row               = ReactBS.Row,
@@ -27,7 +26,8 @@ var SmartMirror = React.createClass({
           <Col xs={9}>
             <Calendar />
             <Clock />
-            <Feed url={Constants.Feed.Url} pollInterval={Constants.Feed.RefreshInterval} />
+            <Feed pollInterval={Constants.Feed.RefreshInterval} 
+                  url={Constants.Feed.Url} />
           </Col>
           <Col xs={3}>
             <Weather pollInterval={Constants.Weather.RefreshInterval}/>

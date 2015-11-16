@@ -76,3 +76,29 @@ span.newsticker img {
   padding: 10px;
   margin-bottom: .8em;
 }
+
+.divider {
+  display: inline;
+  margin: 0 9px;
+  font-size: 1.5em;
+  font-weight: 100;
+  position: relative;
+  top: 3px;
+  line-height: 0;
+}
+
+.author {
+  margin-bottom: 2em;
+  font-weight: 700;
+  font-size: 1.2em;
+  margin-top: .9em;
+}
+
+.article-title {
+  font-family:'HelveticaNeue-UltraLight';
+}
+
+.article-info {
+  margin-top: .9em;
+  margin-bottom: 2em;
+}

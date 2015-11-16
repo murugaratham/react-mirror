@@ -15,7 +15,7 @@ var Jarvis = (function (){
     var command = {};
     command[text] = func;
     annyang.addCommands(command);
-    console.debug(command);
+    console.debug(Object.keys(command));
   }
 
   var _init = function () {

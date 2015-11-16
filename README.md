@@ -7,7 +7,7 @@
 ### Mirror commands
 - My name is Gary (or your name)
 - Wait (this will pause the news rotation)
-- Read for me (reads the news out loud, though i'm struggling to change the voice properly, since chrome loads voices asynchronously)
+- Read for me 
 
 <img src="http://i64.tinypic.com/sy9rb7.jpg" border="0" alt="Image and video hosting by TinyPic" />
 

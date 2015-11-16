@@ -46,9 +46,6 @@ var Weather = React.createClass({
     navigator.geolocation.getCurrentPosition(success, error);
   },
   componentDidMount: function () { 
-    // Jarvis.addCommands('(show) (hide) weather', function() {
-    //   $('.weather').toggle();
-    // });
     this.geolocationSearch();
     setInterval(this.loadFeedFromServer, this.props.pollInterval);
   },
@@ -65,8 +62,8 @@ var Weather = React.createClass({
 var WeatherContainer = React.createClass({  
   render: function() {
      return (
-      <div className="week-container">   
-        <span className="country">{this.props.city}{this.props.country ? `, ${this.props.country}` : null}</span> 
+      <div className="week-container">
+        <span className="country">{this.props.city}{this.props.country ? ', ${this.props.country}' : null}</span> 
         <div className="week-all-days">
           {this.props.weekWeather.map(function (weather, i) {
             return (

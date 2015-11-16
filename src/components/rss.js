@@ -15,6 +15,10 @@ var React                     = require('react'),
     Modal                     = ReactBS.Modal;
 
 var Feed = React.createClass({
+  propTypes: {
+    pollInterval: React.PropTypes.number.isRequired,
+    url:          React.PropTypes.string.isRequired
+  },
   mixins: [SetIntervalMixin],
   getInitialState: function () {
     return { 
@@ -24,6 +28,13 @@ var Feed = React.createClass({
       currentFeed: 0,
       showDialog: false
     };
+  },
+  componentDidMount: function () {
+    this.loadFeedFromServer();
+    setInterval(this.loadFeedFromServer, this.props.pollInterval);
+    this.startRotateFeed();
+    Jarvis.addCommands('wait', this.showModal);
+    Jarvis.addCommands('read for me', this.readCurrentArticle);
   },
   updateState: function (obj) {
     if (this.isMounted()) {
@@ -35,14 +46,7 @@ var Feed = React.createClass({
   },
   pauseRotateFeed: function () {    
     clearInterval(this.feedInterval);
-  },
-  componentDidMount: function () {
-    this.loadFeedFromServer();
-    setInterval(this.loadFeedFromServer, this.props.pollInterval);
-    this.startRotateFeed();
-    Jarvis.addCommands('wait', this.showModal);
-    Jarvis.addCommands('read for me', this.readCurrentArticle);
-  },
+  },  
   getCurrentFeed: function () {
     return this.state.feed.entries[this.state.currentFeed];
   },
@@ -75,8 +79,12 @@ var Feed = React.createClass({
   readCurrentArticle: function () {
     this.showModal();
     var feed = this.getCurrentFeed();
-    console.log($(feed.content).not('style').not('script').text());
-    Say($(feed.content).not('style').text());
+    //strip out <script>
+    var article = $(feed.content).not('style').map(function (idx, val) {
+      $(val).find('script').remove();
+      return $(val);
+    }).text();
+    Say(article);;
   },
   rawHtml: function () {
     var feed = this.getCurrentFeed();
@@ -89,10 +97,14 @@ var Feed = React.createClass({
     if (entry) {
       return (
         <div className="newsticker" onClick={this.handleClick}>
-          <Modal show={this.state.show} onHide={this.hideModal} dialogClassName="custom-modal">             
+          <Modal show={this.state.show} onHide={this.hideModal} dialogClassName="custom-modal">
             <Modal.Body>
-              <h2>{entry.title}</h2>
-              <strong>by {entry.author}</strong><span className="divider">|</span><span>{entry.publishedDate}</span>
+              <h1 className="article-title">{entry.title}</h1>
+              <h4 className="article-info">
+                <strong className="author">by {entry.author}</strong>
+                <span className="divider">|</span>
+                <span>{moment.unix(entry.publishedDate_timestamp).format('MMMM DD, YYYY')}</span>
+              </h4>
               <div className="article" dangerouslySetInnerHTML={this.rawHtml()} />
             </Modal.Body>
           </Modal>
@@ -111,10 +123,10 @@ var Feed = React.createClass({
 });
 
 var FeedItem = React.createClass({
-  rawHtml: function () { 
-    return { __html: this.props.entry.content }
+  propTypes: {
+    entry: React.PropTypes.object.isRequired
   },
-  getTimeago: function () {
+  _getTimeago: function () {
     return moment.unix(this.props.entry.publishedDate_timestamp).fromNow();
   },
   render: function () {
@@ -122,7 +134,7 @@ var FeedItem = React.createClass({
       <div data-link={this.props.entry.link}>
         <h3>{this.props.entry.title}</h3>
         <div>{this.props.entry.contentSnippet} </div>
-        <div>{this.getTimeago()}</div>
+        <div>{this._getTimeago()}</div>
       </div>
     );
   }
