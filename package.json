@@ -2,6 +2,7 @@
   "name": "React-mirror",
   "description": "Smart mirror using ReactJS",
   "version": "0.0.2",
+  "style": "css/*.css",
   "browserify": {
     "transform": [
       [
@@ -32,17 +33,18 @@
     "concurrent": "^0.3.2",
     "eslint": "^1.9.0",
     "eslint-plugin-react": "^3.8.0",
-    "parcelify": "^2.1.0",
     "uglifyjs": "^2.3.6",
     "watchify": "^3.6.0"
   },
   "scripts": {
-    "start": "npm run build && npm run start-server",
-    "start-no-ssl": "npm run build && npm run start-server-no-ssl'",
-    "build": "browserify src/main.js -o static/bundle.js && cat css/*.css > static/bundle.css",
+    "build-js": "browserify src/main.js -o static/bundle.js",
+    "build-css": "cat css/*.css > static/bundle.css",
+    "watch-css": "nodemon --ignore static/ -e css -x \"npm run build-css\"",
+    "start": "npm run build-js && npm run build-css && npm run start-server",
+    "start-no-ssl": "npm run build && npm run start-server-no-ssl'",    
     "start-server": "node node_modules/http-server/bin/http-server -P 'http://api.openweathermap.org' --ssl -C 'localhost-cert.pem' -K 'localhost-key.pem'",
     "start-server-no-ssl": "node node_modules/http-server/bin/http-server -P 'http://api.openweathermap.org'",
-    "dev-watch": "node ./node_modules/concurrently/src/main.js --kill-others \"watchify src/main.js -o static/bundle.js -v\" \"npm run start-server\"",
-    "dev-watch-no-ssl": "node ./node_modules/concurrently/src/main.js --kill-others \"watchify src/main.js -o static/bundle.js -v\" \"npm run start-server-no-ssl\""
+    "dev-watch": "node ./node_modules/concurrently/src/main.js --kill-others \"watchify src/main.js -o static/bundle.js -v\" \"npm run watch-css\" \"npm run start-server\"",
+    "dev-watch-no-ssl": "node ./node_modules/concurrently/src/main.js --kill-others \"watchify src/main.js -o static/bundle.js -v\" \"npm run watch-css\" \"npm run start-server-no-ssl\""
   }
 }

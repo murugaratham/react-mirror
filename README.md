@@ -5,9 +5,10 @@
 
 
 ### Mirror commands
-- My name is Gary (or your name)
 - Wait (this will pause the news rotation)
-- Read for me 
+- Read for me (You can do it while combing your hair)
+
+More coming soon, make a suggestion :)
 
 <img src="http://i64.tinypic.com/sy9rb7.jpg" border="0" alt="Image and video hosting by TinyPic" />
 
@@ -99,16 +100,20 @@ npm install   //<-- this run install all the node dependencies
 npm run start //<-- npm script which will build and start the server
 ```
 
+### Developers
+`npm run dev-watch` or `npm run dev-watch-no-ssl` is now working properly, javascript/jsx updates will be monitored by [watchify](https://github.com/substack/watchify) while css is monitored by [nodemon](https://github.com/remy/nodemon). Your development workflow is as simple as updating the file and refreshing the browser to see your latest updates.
+
 ### More info
 #### To-do
 - ~~Make browserify "watch" source changes whenever i save~~
 - ~~Writing a simple server using node (because openweathermap doesn't support https for free accounts and running annyang on http [sucks](https://github.com/TalAter/annyang))~~
 - ~~Updating npm run script for people that just want to use http instead of https (caveat: annyang on http is slower and more problematic, if you want a performant smart mirror, please create a self-signed cert or buy a commercial one :)~~
 - ~~Fetching RSS feeds (news, stock, etc)~~
+- ~~Customize SpeechSynthesisUtterance to have a nicer voice~~
 - Beautify the screen (I need help here..)
 - Using localstorage to "remember" my name
 - Add more commands and integration with Annyang
-- Customize SpeechSynthesisUtterance to have a nicer voice
+
 
 #### [http-server](https://github.com/indexzero/http-server) was the ideal package for react-mirror
 Firstly, it lived up to it's name of simple, zero-configuration command-line http server. And it also made my life much easier by being able to proxy requests that can't be resolved locally. Thanks [indexzero](https://github.com/indexzero)!
