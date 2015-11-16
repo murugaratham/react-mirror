@@ -12,6 +12,7 @@ var Constants = {
   },  
   Feed : {
     Url: '//hr-pulsesubscriber.appspot.com/items?feed=curated://top_read_News',
+    //Url: 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
     RefreshInterval : 1000 * 60 * 5,
     AppearDuration : 1000 * 5,
     FadeTransitionInterval : {
