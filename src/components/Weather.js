@@ -14,18 +14,24 @@ var Weather = React.createClass({
       weekWeather: []
     };
   },
-  getData: function (lat, lon) {    
-    return $.get('data/2.5/forecast/daily?lat=' 
-      + lat + '&lon=' + lon + '&APPID=' + Constants.Weather.ApiKey + '&units=metric&cnt=7');
+  getData: function (lat, lon) {
+    var yql = '//query.yahooapis.com/v1/public/yql?q=';
+    yql += encodeURIComponent('select * from html where url=');
+    yql += encodeURIComponent('"http://api.openweathermap.org/data/2.5/forecast/daily?');
+    yql += encodeURIComponent('lat=' + lat + '&lon=' + lon + '&APPID=' + Constants.Weather.ApiKey + '&units=metric&cnt=7"');
+    yql += '&format=json&env=store';
+    yql += encodeURIComponent('://datatables.org/alltableswithkeys');
+    return $.get(yql);
   },
   updateState: function (lat, lon) {
     this.getData(lat, lon)
       .then(function(data) {
+        var result = $.parseJSON(data.query.results.body);
         if (this.isMounted()) {
           this.setState({
-            city: data.city.name,
-            country: data.city.country,
-            weekWeather: data.list
+            city: result.city.name,
+            country: result.city.country,
+            weekWeather: result.list
           });
         }
       }.bind(this));      
@@ -63,7 +69,7 @@ var WeatherContainer = React.createClass({
   render: function() {
      return (
       <div className="week-container">
-        <span className="country">{this.props.city}{this.props.country ? ', ${this.props.country}' : null}</span> 
+        <span className="country">{this.props.city}{this.props.country ? `, ${this.props.country}` : null}</span> 
         <div className="week-all-days">
           {this.props.weekWeather.map(function (weather, i) {
             return (

@@ -47200,8 +47200,8 @@ var Constants = {
     DefaultLocation: [1.3, 103.8]
   },
   Feed: {
-    Url: '//hr-pulsesubscriber.appspot.com/items?feed=curated://top_read_News',
-    //Url: 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
+    //Url: '//hr-pulsesubscriber.appspot.com/items?feed=curated://top_read_News',
+    Url: 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml',
     RefreshInterval: 1000 * 60 * 5,
     AppearDuration: 1000 * 5,
     FadeTransitionInterval: {
@@ -47218,27 +47218,17 @@ module.exports = Constants;
 //https://github.com/prabirshrestha/reactjs-playground/blob/master/rss-feed/client/utils/feed.js
 ;
 var $ = require('jquery');
-
-var GetFeed2 = function (feedUrl, callback) {
-    var url = window.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=150&callback=?&q=' + encodeURIComponent(feedUrl);
-    $.getJSON(url, function (result) {
-        if (!callback) return;
-        if (result.responseStatus === 200) {
-            callback(null, result.responseData.feed);
-        } else {
-            callback(new Error('failed to get feed from ' + feedUrl));
-        }
-    });
-};
-
 var GetFeed = function (feedUrl, callback) {
-    $.ajax({
-        url: feedUrl,
-        dataType: 'jsonp',
-        success: function (res) {
-            callback(null, res.responseData.feed);
-        }
-    });
+  if (!/hr-pulsesubscriber.appspot.com/i.test(feedUrl)) {
+    feedUrl = window.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=150&callback=?&q=' + encodeURIComponent(feedUrl);
+  }
+  $.ajax({
+    url: feedUrl,
+    dataType: 'jsonp',
+    success: function (res) {
+      callback(null, res.responseData.feed);
+    }
+  });
 };
 module.exports = GetFeed;
 
@@ -47506,7 +47496,7 @@ var Feed = React.createClass({
               React.createElement(
                 'span',
                 null,
-                moment.unix(entry.publishedDate_timestamp).format('MMMM DD, YYYY')
+                moment(entry.publishedDate).format('MMMM DD, YYYY')
               )
             ),
             React.createElement('div', { className: 'article', dangerouslySetInnerHTML: this.rawHtml() })
@@ -47532,7 +47522,7 @@ var FeedItem = React.createClass({
     entry: React.PropTypes.object.isRequired
   },
   _getTimeago: function () {
-    return moment.unix(this.props.entry.publishedDate_timestamp).fromNow();
+    return moment(this.props.entry.publishedDate).fromNow();
   },
   render: function () {
     return React.createElement(
@@ -47665,15 +47655,22 @@ var Weather = React.createClass({
     };
   },
   getData: function (lat, lon) {
-    return $.get('data/2.5/forecast/daily?lat=' + lat + '&lon=' + lon + '&APPID=' + Constants.Weather.ApiKey + '&units=metric&cnt=7');
+    var yql = '//query.yahooapis.com/v1/public/yql?q=';
+    yql += encodeURIComponent('select * from html where url=');
+    yql += encodeURIComponent('"http://api.openweathermap.org/data/2.5/forecast/daily?');
+    yql += encodeURIComponent('lat=' + lat + '&lon=' + lon + '&APPID=' + Constants.Weather.ApiKey + '&units=metric&cnt=7"');
+    yql += '&format=json&env=store';
+    yql += encodeURIComponent('://datatables.org/alltableswithkeys');
+    return $.get(yql);
   },
   updateState: function (lat, lon) {
     this.getData(lat, lon).then((function (data) {
+      var result = $.parseJSON(data.query.results.body);
       if (this.isMounted()) {
         this.setState({
-          city: data.city.name,
-          country: data.city.country,
-          weekWeather: data.list
+          city: result.city.name,
+          country: result.city.country,
+          weekWeather: result.list
         });
       }
     }).bind(this));
@@ -47714,7 +47711,7 @@ var WeatherContainer = React.createClass({
         'span',
         { className: 'country' },
         this.props.city,
-        this.props.country ? ', ${this.props.country}' : null
+        this.props.country ? `, ${ this.props.country }` : null
       ),
       React.createElement(
         'div',

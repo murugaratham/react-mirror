@@ -30,9 +30,10 @@
   },
   "devDependencies": {
     "babel-eslint": "^4.1.4",
-    "concurrent": "^0.3.2",
+    "concurrently": "^1.0.0",
     "eslint": "^1.9.0",
     "eslint-plugin-react": "^3.8.0",
+    "nodemon": "^1.8.1",
     "uglifyjs": "^2.3.6",
     "watchify": "^3.6.0"
   },
@@ -41,7 +42,7 @@
     "build-css": "cat css/*.css > static/bundle.css",
     "watch-css": "nodemon --ignore static/ -e css -x \"npm run build-css\"",
     "start": "npm run build-js && npm run build-css && npm run start-server",
-    "start-no-ssl": "npm run build-js && npm run build-css && npm run start-server-no-ssl",    
+    "start-no-ssl": "npm run build-js && npm run build-css && npm run start-server-no-ssl",
     "start-server": "node node_modules/http-server/bin/http-server -P 'http://api.openweathermap.org' --ssl -C 'localhost-cert.pem' -K 'localhost-key.pem'",
     "start-server-no-ssl": "node node_modules/http-server/bin/http-server -P 'http://api.openweathermap.org'",
     "dev-watch": "node ./node_modules/concurrently/src/main.js --kill-others \"watchify src/main.js -o static/bundle.js -v\" \"npm run watch-css\" \"npm run start-server\"",

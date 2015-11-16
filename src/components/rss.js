@@ -103,7 +103,7 @@ var Feed = React.createClass({
               <h4 className="article-info">
                 <strong className="author">by {entry.author}</strong>
                 <span className="divider">|</span>
-                <span>{moment.unix(entry.publishedDate_timestamp).format('MMMM DD, YYYY')}</span>
+                <span>{moment(entry.publishedDate).format('MMMM DD, YYYY')}</span>
               </h4>
               <div className="article" dangerouslySetInnerHTML={this.rawHtml()} />
             </Modal.Body>
@@ -127,7 +127,7 @@ var FeedItem = React.createClass({
     entry: React.PropTypes.object.isRequired
   },
   _getTimeago: function () {
-    return moment.unix(this.props.entry.publishedDate_timestamp).fromNow();
+    return moment(this.props.entry.publishedDate).fromNow();
   },
   render: function () {
     return (
