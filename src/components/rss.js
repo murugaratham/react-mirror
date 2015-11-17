@@ -8,7 +8,7 @@ var React                     = require('react'),
     Jarvis                    = require('../Utils/Jarvis'),
     SetIntervalMixin          = require('../Utils/mixin/SetIntervalMixin'),
     Constants                 = require('../Utils/Constants'),
-    GetFeed                   = require('../Utils/FetchRss'),
+    Service                   = require('../Utils/Service'),
     Say                       = require('./Speech'),
     ButtonToolbar             = ReactBS.ButtonToolbar,
     Button                    = ReactBS.Button,
@@ -56,14 +56,15 @@ var Feed = React.createClass({
     if(currentFeed < feedCount) {
       currentFeed++;
     } else {
-      currentFeed = 0 //reset
+      currentFeed = 0
     }   
     this.updateState({currentFeed: currentFeed});
   },
   loadFeedFromServer: function () {
-    GetFeed(this.props.url, function (err, feed) {
-      this.updateState({ feed: feed });
-    }.bind(this));
+    var self = this;
+    Service.getFeed(this.props.url).then(function(data) {
+      self.updateState({ feed: data.responseData.feed });
+    });
   },
   handleClick: function () {
     this.readCurrentArticle();
@@ -80,11 +81,13 @@ var Feed = React.createClass({
     this.showModal();
     var feed = this.getCurrentFeed();
     //strip out <script>
-    var article = $(feed.content).not('style').map(function (idx, val) {
+    var article = document.createElement('div');
+    $(article).html($.parseHTML(feed.content));
+    var text = $(article).not('style').map(function (idx, val) {
       $(val).find('script').remove();
       return $(val);
     }).text();
-    Say(article);;
+    Say(text);
   },
   rawHtml: function () {
     var feed = this.getCurrentFeed();
@@ -95,15 +98,21 @@ var Feed = React.createClass({
   render: function () {
     var entry = this.getCurrentFeed();
     if (entry) {
+    var author;
+    if (entry.author && entry.author !== '') {
+      author = (<span>
+                 <strong className="author">by {entry.author}</strong>
+                 <span className="divider">|</span>
+               </span>);
+    }
       return (
         <div className="newsticker" onClick={this.handleClick}>
           <Modal show={this.state.show} onHide={this.hideModal} dialogClassName="custom-modal">
             <Modal.Body>
               <h1 className="article-title">{entry.title}</h1>
               <h4 className="article-info">
-                <strong className="author">by {entry.author}</strong>
-                <span className="divider">|</span>
-                <span>{moment(entry.publishedDate).format('MMMM DD, YYYY')}</span>
+                {author}
+                <span>{moment(new Date(entry.publishedDate)).format('MMMM DD, YYYY')}</span>
               </h4>
               <div className="article" dangerouslySetInnerHTML={this.rawHtml()} />
             </Modal.Body>
@@ -127,7 +136,7 @@ var FeedItem = React.createClass({
     entry: React.PropTypes.object.isRequired
   },
   _getTimeago: function () {
-    return moment(this.props.entry.publishedDate).fromNow();
+    return moment(new Date(this.props.entry.publishedDate)).fromNow();
   },
   render: function () {
     return (

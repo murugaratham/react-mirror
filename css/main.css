@@ -102,3 +102,141 @@ span.newsticker img {
   margin-top: .9em;
   margin-bottom: 2em;
 }
+
+div.themecolor{
+  background: #3690b6;
+}
+
+div.maincage{
+  height:348px;
+  display: block;
+  position: relative;
+  z-index: 0;
+  font-family: lato;
+}
+div.maincage::after {
+  content: "";
+  /*background:url(images/giphyfff.gif);*/
+  background-size:cover;
+  opacity: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  opacity: 0.54; 
+  background-size: 133%;
+  background-position-x: -87px;
+}
+div.bgimagecage{
+  height:349px;
+  z-index: -1;
+  text-align: center;  
+}
+div.commonwidth, div.commonwidth::after {
+  width: 533px;
+}
+div.location {
+  background: rgba(0, 0, 0, 0.22);
+  padding: 12px 0px 12px 0px;
+  margin-bottom: 15px;
+}
+
+
+span.city{
+padding: 5px 36px 5px 10px;
+border-radius: 3px;
+border: solid rgb(184, 184, 184) 1px;
+background: none;
+color: rgb(255, 255, 255);
+font-family: lato;
+font-size: 16px;
+width: 19%;
+}
+span.tempvalue{
+  font-size: 50px;
+  color: white;
+  opacity: .7;
+}
+span.date{
+width: 100%;
+text-align: center;
+font-size: 18px;
+float: left;
+color: white;
+padding: 36px 0 18px 0;
+}
+span.searchicon{
+padding: 5px;
+border-radius: 3px;
+border: none;
+width: 20px;
+margin-left: -35px;
+cursor: pointer;
+opacity: 0.6;
+background: rgba(45, 122, 154, 0.2);
+}
+div.todayweather{
+  background: rgba(0, 0, 0, 0.41);
+  margin-top: 15px;
+}
+div.todayweatherinner{
+  display: table;
+  margin: 0 auto;
+  width: 90%;
+  padding: 18px 0px 18px 0px;
+  color: white;
+}
+i.todayweathericon{
+font-size: 60px;
+opacity: 0.7;
+float:left;
+width: 20%;
+}
+i.centericon{
+  border-radius: 90px;
+  font-size:45px;
+  padding: 24px 20px 24px 20px;
+  background: rgba(0, 0, 0, 0.67);
+}
+div.todayweathertxt{
+  font-size: 24px;
+}
+div.todayweathertxt b{
+font-style:normal;
+font-weight:100;
+opacity:0.3;
+}
+i.arrowsupdown{
+opacity:0.4;
+}
+span.smalldate{
+font-size:9px;
+}
+i.weekdayweathericon{
+font-size: 30px;
+}
+div.daycol{
+width: 14.2%;
+padding: 10px 0 0px 0;
+height: 91%;
+float: left;
+color: white;
+text-align: center;
+line-height: 20px;
+}
+div.activeday{
+background: rgba(0, 0, 0, 0.2);
+}
+div.dayscell{
+float: left;
+width: 100%;
+height: 155px;
+}
+div.dayscellinner{
+width:100%;
+height:155px;
+float:left;
+background: rgba(0, 0, 0, 0.15);
+} 

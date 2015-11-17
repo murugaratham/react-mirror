@@ -4,7 +4,9 @@ var React           = require('react'),
     Moment          = require('moment'),
     $               = require('jquery'),
     Constants       = require('../Utils/Constants'),
-    Jarvis          = require('../Utils/Jarvis');
+    Jarvis          = require('../Utils/Jarvis'),
+    Service         = require('../Utils/Service');
+
 
 var Weather = React.createClass({
   getInitialState: function () {
@@ -14,40 +16,30 @@ var Weather = React.createClass({
       weekWeather: []
     };
   },
-  getData: function (lat, lon) {
-    var yql = '//query.yahooapis.com/v1/public/yql?q=';
-    yql += encodeURIComponent('select * from html where url=');
-    yql += encodeURIComponent('"http://api.openweathermap.org/data/2.5/forecast/daily?');
-    yql += encodeURIComponent('lat=' + lat + '&lon=' + lon + '&APPID=' + Constants.Weather.ApiKey + '&units=metric&cnt=7"');
-    yql += '&format=json&env=store';
-    yql += encodeURIComponent('://datatables.org/alltableswithkeys');
-    return $.get(yql);
-  },
-  updateState: function (lat, lon) {
-    this.getData(lat, lon)
-      .then(function(data) {
-        var result = $.parseJSON(data.query.results.body);
-        if (this.isMounted()) {
-          this.setState({
-            city: result.city.name,
-            country: result.city.country,
-            weekWeather: result.list
-          });
-        }
-      }.bind(this));      
+  updateState: function (latlon, city) {
+    var self = this;
+    Service.getWeather(latlon, city).then(function(data) {
+      var result = $.parseJSON(data.query.results.body);
+      if (self.isMounted()) {
+        self.setState({
+          city: result.city.name,
+          country: result.city.country,
+          weekWeather: result.list
+        });
+      }
+    });
   },  
   geolocationSearch: function () {
-    var latlon = Constants.Weather.DefaultLocation;
-    var lat = latlon[0];
-    var lon = latlon[1];
     var success = function (position) {
       lat = position.coords.latitude;
       lon = position.coords.longitude;
-      this.updateState(lat, lon);
+      this.updateState([lat, lon]);
     }.bind(this);
     var error = function (error) {
-      console.log('There was an error getting your position:' + error);
-      //this.updateState(lat, lon);
+      var latlon = Constants.Weather.DefaultLocation;
+      var city = Constants.Weather.DefaultCity;
+      if(city)
+      this.updateState(latlon, city);
     }.bind(this);
     navigator.geolocation.getCurrentPosition(success, error);
   },
@@ -56,32 +48,55 @@ var Weather = React.createClass({
     setInterval(this.loadFeedFromServer, this.props.pollInterval);
   },
   render: function() {
-    return (
-      <WeatherContainer 
-        weekWeather={this.state.weekWeather}
-        country={this.state.country}
-        city={this.state.city}/>
-    );
+    if(this.state.weekWeather.length !== 0)
+    {
+      return (
+        <WeatherContainer weekWeather={this.state.weekWeather}
+                          country={this.state.country}
+                          city={this.state.city}/>
+      );
+    } else {
+      return <div/>
+    }
   }  
 });
 
-var WeatherContainer = React.createClass({  
+var WeatherContainer = React.createClass({
   render: function() {
+  var todayWeather = this.props.weekWeather[0],
+      timestamp = todayWeather.dt,
+      max_temp = todayWeather.temp.max,
+      min_temp = todayWeather.temp.min,
+      weather_type = todayWeather.weather[0].main,
+      humidity = todayWeather.humidity,
+      wind_speed = todayWeather.speed,
+      icon = 'wi wi-owm-' + todayWeather.weather[0].id + ' centericon k-widget',
+      wind_degrees = 'wi wi-wind towards-'  + todayWeather.deg + '-deg';
      return (
-      <div className="week-container">
-        <span className="country">{this.props.city}{this.props.country ? `, ${this.props.country}` : null}</span> 
-        <div className="week-all-days">
-          {this.props.weekWeather.map(function (weather, i) {
-            return (
-              <div key={i} className="week-one-day">
-                <WeatherDetails data={weather} />
+      <div className="maincage themecolor">
+        <div className="bgimagecage">
+          <div className="location">
+            {this.props.city}{this.props.country ? `, ${this.props.country}` : null}
+          </div>
+          <span className="tempvalue">
+            <i className={icon}/>
+          </span>
+          <div className="todayweather">
+            <div className="todayweatherinner">
+              <div className="todayweathertxt">{weather_type}<b> | </b>
+                <i className="icon-up-open arrowsupdown"></i>{Math.round(max_temp)}°c<b> | </b>
+                <i className="icon-down-open arrowsupdown"></i>{Math.round(min_temp)}°c
               </div>
-            )
-          })}
+              <div className="todayweathertxt">
+                <i className={wind_degrees}></i>{wind_speed}<b> | </b>
+                {humidity}<i className="wi wi-humidity"></i>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
-  }  
+  }
 });
 
 var WeatherDetails = React.createClass({  

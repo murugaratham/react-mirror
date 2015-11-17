@@ -8,9 +8,11 @@ var Constants = {
   Weather: {
     ApiKey: '1ee24161cdbde3ee4e90303b6635b317',
     RefreshInterval: 1000 * 60 * 60,
-    DefaultLocation: [1.3, 103.8]
+    DefaultCoordinates: [1.3, 103.8],
+    DefaultCity: 'Singapore'
   },  
   Feed : {
+    //Url: 'http://finance.yahoo.com/rss/topfinstories',
     Url: '//hr-pulsesubscriber.appspot.com/items?feed=curated://top_read_News',
     //Url: 'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml', <-- this rss sucks..
     RefreshInterval : 1000 * 60 * 5,

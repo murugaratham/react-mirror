@@ -23,13 +23,13 @@ var SmartMirror = React.createClass({
     return (
       <Grid>
         <Row>
-          <Col xs={9}>
+          <Col xs={8}>
             <Calendar />
             <Clock />
             <Feed pollInterval={Constants.Feed.RefreshInterval} 
                   url={Constants.Feed.Url} />
           </Col>
-          <Col xs={3}>
+          <Col xs={4}>
             <Weather pollInterval={Constants.Weather.RefreshInterval}/>
           </Col>
         </Row>
