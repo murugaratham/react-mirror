@@ -1,14 +1,16 @@
 'use strict';
 
 var React           = require('react'),
-    Moment          = require('moment'),
+    moment          = require('moment'),
     $               = require('jquery'),
+    SetIntervalMixin= require('../Utils/mixin/SetIntervalMixin'),
     Constants       = require('../Utils/Constants'),
     Jarvis          = require('../Utils/Jarvis'),
     Service         = require('../Utils/Service');
 
 
 var Weather = React.createClass({
+  mixins: [SetIntervalMixin],
   getInitialState: function () {
     return {
       city: '',
@@ -52,8 +54,8 @@ var Weather = React.createClass({
     {
       return (
         <WeatherContainer weekWeather={this.state.weekWeather}
-                          country={this.state.country}
-                          city={this.state.city}/>
+                      country={this.state.country}
+                      city={this.state.city}/>
       );
     } else {
       return <div/>
@@ -62,16 +64,17 @@ var Weather = React.createClass({
 });
 
 var WeatherContainer = React.createClass({
-  render: function() {
-  var todayWeather = this.props.weekWeather[0],
-      timestamp = todayWeather.dt,
-      max_temp = todayWeather.temp.max,
-      min_temp = todayWeather.temp.min,
-      weather_type = todayWeather.weather[0].main,
-      humidity = todayWeather.humidity,
-      wind_speed = todayWeather.speed,
-      icon = 'wi wi-owm-' + todayWeather.weather[0].id + ' centericon k-widget',
-      wind_degrees = 'wi wi-wind towards-'  + todayWeather.deg + '-deg';
+  getInitialState: function () {
+    var todayWeather = this.props.weekWeather.splice(0, 1)[0];
+    return {
+      weekWeather: this.props.weekWeather,
+      todayWeather: todayWeather
+    }
+  },
+  getIcon: function () {
+    return 'wi wi-owm-' + this.state.todayWeather.weather[0].id + ' centericon k-widget';
+  },
+  render: function() {  
      return (
       <div className="maincage themecolor">
         <div className="bgimagecage">
@@ -79,19 +82,19 @@ var WeatherContainer = React.createClass({
             {this.props.city}{this.props.country ? `, ${this.props.country}` : null}
           </div>
           <span className="tempvalue">
-            <i className={icon}/>
+            <i className={this.getIcon()}/>
           </span>
           <div className="todayweather">
-            <div className="todayweatherinner">
-              <div className="todayweathertxt">{weather_type}<b> | </b>
-                <i className="icon-up-open arrowsupdown"></i>{Math.round(max_temp)}°c<b> | </b>
-                <i className="icon-down-open arrowsupdown"></i>{Math.round(min_temp)}°c
-              </div>
-              <div className="todayweathertxt">
-                <i className={wind_degrees}></i>{wind_speed}<b> | </b>
-                {humidity}<i className="wi wi-humidity"></i>
-              </div>
-            </div>
+            <TodayWeather weather={this.state.todayWeather}/>
+          </div>
+          <div className="dayscell themecolor">
+          {
+            this.state.weekWeather.map(function (weather, i) {
+              return (
+                <RemainingDaysWeather key={i} weather={weather} />
+              )
+            })
+          }
           </div>
         </div>
       </div>
@@ -99,42 +102,74 @@ var WeatherContainer = React.createClass({
   }
 });
 
-var WeatherDetails = React.createClass({  
-  capitalizeFirstLetter: function(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+var TodayWeather = React.createClass({
+  getInitialState: function () {
+    var todayWeather = this.props.weather;
+    return {
+      timestamp: todayWeather.dt,
+      max_temp: todayWeather.temp.max,
+      min_temp: todayWeather.temp.min,
+      weather_type: todayWeather.weather[0].main,
+      humidity: todayWeather.humidity,
+      wind_speed: todayWeather.speed,
+      wind_degrees: 'wi wi-wind towards-'  + todayWeather.deg + '-deg'
+    }
   },
-  getDayName: function() {
-    var days = {
-      sameDay: '[Today]',
-      nextDay: 'dddd',
-      nextWeek: 'dddd',
-      lastDay: 'dddd',
-      lastWeek: 'dddd'
-    }    
+  componentDidMount: function () {
+    $('body').append('<style>div.maincage::after{background: url(images/giphyfff.gif);');
+  },
+  render: function () {
     return (
-      <div className="day">
-        {Moment(this.props.data.dt * 1000).calendar(null, days)}
-      </div>
-    )
-  },
-  render: function() {
-    var weather = this.props.data,
-        timestamp = weather.dt,
-        temperature = weather.temp.max,
-        weatherType = weather.weather[0].description,
-        weatherDescription = weather.weather[0].main,
-        icon = 'wi wi-owm-' + weather.weather[0].id;
-        //https://erikflowers.github.io/weather-icons/
-    return ( 
-      <div className="temperature-info">
-        {this.getDayName()}
-        <i className={icon}/>
-        <span className="info">{this.capitalizeFirstLetter(weatherType)}</span>
-        <div className="temperature">
-          {Math.round(temperature)} °C
+       <div className="todayweatherinner">
+        <div className="todayweathertxt">{this.state.weather_type}<b> | </b>
+          <i className="icon-up-open arrowsupdown"></i>{Math.round(this.state.max_temp)}°C<b> | </b>
+          <i className="icon-down-open arrowsupdown"></i>{Math.round(this.state.min_temp)}°C
+        </div>
+        <div className="todayweathertxt">
+          <i className={this.state.wind_degrees}></i>{this.state.wind_speed}m/s<b> | </b>
+          {this.state.humidity}<i className="wi wi-humidity"></i>
         </div>
       </div>
-    )
+    );
+  }
+});
+
+var RemainingDaysWeather = React.createClass({
+  getInitialState: function () {
+    var weather = this.props.weather;
+    return {
+      timestamp: weather.dt,
+      morn_temp: weather.temp.morn,
+      eve_temp: weather.temp.eve,
+      night_temp: weather.temp.night,
+      weather_type: weather.weather[0].main,
+      humidity: weather.humidity,
+      wind_speed: weather.speed,
+      wind_degrees: 'wi wi-wind towards-'  + weather.deg + '-deg',
+      id: weather.weather[0].id,
+      day: this.getDay(),
+      date: this.getDate()
+    }
+  },
+  getIcon: function () {
+    return 'wi wi-owm-' + this.state.id;
+  },
+  getDay: function () {
+    return moment.unix(this.props.weather.dt).format('ddd');
+  },
+  getDate: function () {
+    return moment.unix(this.props.weather.dt).format('MMM DD');
+  },
+  render: function () {
+    return (
+      <div className="daycol">{this.state.day}<br/>
+        <span className="smalldate">{this.state.date}</span><br/>
+        <i className={this.getIcon()}></i><br/>
+        <i className="icon-sunrise"></i>{Math.round(this.state.morn_temp)}°<br/>
+        <i className="icon-sun"></i>{Math.round(this.state.eve_temp)}°<br/>
+        <i className="icon-moon"></i>{Math.round(this.state.night_temp)}°<br/>
+      </div>
+    );
   }
 });
 

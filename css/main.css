@@ -103,8 +103,13 @@ span.newsticker img {
   margin-bottom: 2em;
 }
 
+.wi {
+  font-size: 1em;
+  padding: 5px;
+}
+
 div.themecolor{
-  background: #3690b6;
+  background: #598AD6;
 }
 
 div.maincage{
@@ -218,7 +223,7 @@ i.weekdayweathericon{
 font-size: 30px;
 }
 div.daycol{
-width: 14.2%;
+width: 16.6%;
 padding: 10px 0 0px 0;
 height: 91%;
 float: left;
