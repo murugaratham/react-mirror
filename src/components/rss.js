@@ -85,6 +85,7 @@ var Feed = React.createClass({
     $(article).html($.parseHTML(feed.content));
     var text = $(article).not('style').map(function (idx, val) {
       $(val).find('script').remove();
+      $(val).find('style').remove();
       return $(val);
     }).text();
     Say(text);

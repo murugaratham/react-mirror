@@ -6,12 +6,12 @@ var React             = require('react'),
     Grid              = ReactBS.Grid,
     Row               = ReactBS.Row,
     Col               = ReactBS.Col,
-    Clock             = require('./components/Clock'),
-    Calendar          = require('./components/Calendar'),
-    Weather           = require('./components/Weather'),
-    Feed              = require('./components/RSS'),
-    Jarvis            = require('./Utils/Jarvis'),
-    Constants         = require('./Utils/Constants');
+    Clock             = require('../components/Clock'),
+    Calendar          = require('../components/Calendar'),
+    Weather           = require('../components/Weather'),
+    Feed              = require('../components/RSS'),
+    Jarvis            = require('../Utils/Jarvis'),
+    Constants         = require('../Utils/Constants');
 
 //main app
 var SmartMirror = React.createClass({
