@@ -16,17 +16,18 @@
     ]
   },
   "dependencies": {
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
-    "babelify": "*",
-    "react-intl": "1.2.0",
     "babel-preset-react": "*",
+    "babelify": "*",
+    "browserify": "^12.0.1",
+    "express": "^4.13.3",
+    "http-server": "^0.8.5",
     "jquery": "^2.0",
     "moment": "*",
-    "http-server": "^0.8.5",
-    "browserify": "^12.0.1",
+    "react": "^0.14.0",
+    "react-bootstrap": "^0.27.3",
     "react-css-transition-replace": "^1.0.0",
-    "react-bootstrap": "^0.27.3"
+    "react-dom": "^0.14.0",
+    "react-intl": "1.2.0"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.4",
@@ -43,10 +44,10 @@
     "build": "npm run build-js && npm run build-css",
     "watch-css": "nodemon --ignore static/ -e css -x \"npm run build-css\"",
     "watch-js": "watchify src/main.js -o static/bundle.js -v",
-    "start": "npm run build && npm run start-server",
-    "start-no-ssl": "npm run build && npm run start-server-no-ssl",
-    "start-server": "node node_modules/http-server/bin/http-server -P 'http://api.openweathermap.org' --ssl -C 'localhost-cert.pem' -K 'localhost-key.pem'",
-    "start-server-no-ssl": "node node_modules/http-server/bin/http-server -P 'http://api.openweathermap.org'",
+    "start": "npm install && npm run build && node server.js -S -C localhost-cert.pem -K localhost-key.pem",
+    "start-no-ssl": "npm install && npm run build && node server.js",
+    "start-server": "node node_modules/http-server/bin/http-server --ssl -C localhost-cert.pem -K localhost-key.pem",
+    "start-server-no-ssl": "node node_modules/http-server/bin/http-server",
     "dev-watch": "node ./node_modules/concurrently/src/main.js --kill-others \"npm run watch-js\" \"npm run watch-css\" \"npm run start-server\"",
     "dev-watch-no-ssl": "node ./node_modules/concurrently/src/main.js --kill-others \"npm run watch-js\" \"npm run watch-css\" \"npm run start-server-no-ssl\""
   }

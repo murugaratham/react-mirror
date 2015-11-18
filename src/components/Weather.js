@@ -54,8 +54,8 @@ var Weather = React.createClass({
     {
       return (
         <WeatherContainer weekWeather={this.state.weekWeather}
-                      country={this.state.country}
-                      city={this.state.city}/>
+                          country={this.state.country}
+                          city={this.state.city}/>
       );
     } else {
       return <div/>
@@ -106,7 +106,6 @@ var TodayWeather = React.createClass({
   getInitialState: function () {
     var todayWeather = this.props.weather;
     return {
-      timestamp: todayWeather.dt,
       max_temp: todayWeather.temp.max,
       min_temp: todayWeather.temp.min,
       weather_type: todayWeather.weather[0].main,
@@ -116,6 +115,7 @@ var TodayWeather = React.createClass({
     }
   },
   componentDidMount: function () {
+    //should load a gif dynamically depending on weather condition (e.g. rain, sunny, windy, etc)
     $('body').append('<style>div.maincage::after{background: url(images/giphyfff.gif);');
   },
   render: function () {

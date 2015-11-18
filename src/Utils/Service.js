@@ -26,6 +26,8 @@ var Service = (function() {
       yql += encodeURIComponent('q=' + city + '&');
     else if (latlon)
       yql += encodeURIComponent('lat=' + latlon[0] + '&lon=' + latlon[1]);
+    else 
+      throw 'Please specify location in Constants.js';
     yql += encodeURIComponent('&APPID=' + Constants.Weather.ApiKey + '&units=metric&cnt=7"');
     yql += '&format=json&env=store';
     yql += encodeURIComponent('://datatables.org/alltableswithkeys');
