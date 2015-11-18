@@ -3,6 +3,11 @@
   "description": "Smart mirror using ReactJS",
   "version": "0.0.2",
   "style": "css/*.css",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/murugaratham/react-mirror.git"
+  },
+  "license": "WTFPL",
   "browserify": {
     "transform": [
       [

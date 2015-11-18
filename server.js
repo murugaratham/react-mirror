@@ -9,13 +9,13 @@ var path      = require('path'),
 program
   .version(pkg.version)
   .option('-p, --port <port>',         'Port on which to listen to (defaults to 8080)', parseInt)
-  .option('-S, --ssl',                 'Enable https')
+  .option('-S, --ssl',                 'Enable https (defaults to port 8443)')
   .option('-C, --cert <path to cert>', 'Path to ssl cert file (default: cert.pem)')
   .option('-K, --key  <path to key>',  'Path to ssl key file (default: key.pem)')
   .parse(process.argv);
 
-var port = program.port || 8080,
-    ssl  = !!program.ssl,
+var ssl  = !!program.ssl,
+    port = program.port || ssl ? 8443 : 8080,
     cert = program.cert || path.join(__dirname, 'cert.pem'),
     key  = program.key  || path.join(__dirname, 'key.pem');
 
