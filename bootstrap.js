@@ -38,22 +38,46 @@ function checkLocalVersion(gitver) {
 }
 
 function fetchZipBall(gitPkg) {
-  var zipFile = path.join(__dirname, 'tmp', gitPkg.tag_name+'.zip');
-  var r = baseRequest({
-    url: gitPkg.zipball_url,
-    proxy: getProxyAuth()
+  return new Promise(function (resolve, reject) {
+    var zipFile = path.join(__dirname, 'tmp', gitPkg.tag_name+'.zip');
+    try {
+      var r = baseRequest({ url: gitPkg.zipball_url });
+      r.on('error', function (err) {
+        return reject(err);
+      })
+      .on('response', function (res) {
+        res.pipe(fs.createWriteStream(zipFile));
+      })
+      .on('complete', function () {
+        extract(zipFile, {dir: './tmp'}, function (err) {
+          if(err) { 
+            return reject (err);
+          } else {
+            return resolve ();
+          }
+        });
+      });
+    } catch (err) { return reject (err); }
   });
-  r.on('error', function (err) {
-    console.log(err);
-  })
-  .on('response', function (res) {
-    res.pipe(fs.createWriteStream(zipFile));
-  })
-  .on('complete', function () {
-    extract(zipFile, {dir: './tmp'}, function (err) {
-      if(err) console.log(err);
-    });
-  });
+}
+
+function fetchZipBallErr(err) {
+  console.log('Error downloading latest update, reasonL ' + err);
+}
+
+function updatePackage() {
+  //todo:
+  //
+  //mkdir tmp/archived-<semver>
+  //read .gitignore to skip
+  //stop node process
+  //move all none ignored files there
+  //move latest file from tmp into cwd
+  //run npm install, incase we have new dependencies
+  //spawn a new node process
+  //
+  //
+  //how do we update bootstrap.js then?
 }
 
 function gitCallback (err, res, body) {
@@ -62,18 +86,14 @@ function gitCallback (err, res, body) {
       var releases = JSON.parse(body);
       var gitPkg = getPackageUrl(releases);
       var requireUpdate = checkLocalVersion(gitPkg.tag_name);
-      
       //if(requireUpdate) {
         try {
           fs.mkdirSync('./tmp');
         } catch (e) {
           if (e.code != 'EEXIST') throw e;
         }
-        fetchZipBall(gitPkg);
+        fetchZipBall(gitPkg).then(updatePackage, fetchZipBallErr);
       //}
-
-        
-        
         //update local server
         //spawn('npm', ['install']).on('close', function() { });
       //}
@@ -85,6 +105,5 @@ function gitCallback (err, res, body) {
   }
 }
 
-baseRequest({
-  url: 'https://api.github.com/repos/murugaratham/react-mirror/releases'     
-}, gitCallback)
+//setInterval to check for updates
+baseRequest({url: 'https://api.github.com/repos/murugaratham/react-mirror/releases'}, gitCallback);
