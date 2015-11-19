@@ -19,7 +19,7 @@ var ssl  = !!program.ssl,
     beta = !!program.beta,
     port = program.port || ssl ? 8443 : 8080,
     cert = program.cert || path.join(__dirname, 'cert.pem'),
-    key  = program.key  || path.join(__dirname, 'key.pem'),    
+    key  = program.key  || path.join(__dirname, 'key.pem'),
     app  = express(), 
     server;
 
