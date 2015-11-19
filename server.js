@@ -21,13 +21,7 @@ var ssl  = !!program.ssl,
     cert = program.cert || path.join(__dirname, 'cert.pem'),
     key  = program.key  || path.join(__dirname, 'key.pem'),    
     app  = express(), 
-    server,
-    requestOpts = {
-      url: 'https://api.github.com/repos/murugaratham/react-mirror/releases',
-      headers: {
-        'User-Agent': 'react-mirror'
-      }
-    };
+    server;
 
 app.use('/', express.static(__dirname + '/'));
 
@@ -43,49 +37,6 @@ if(ssl) {
   server = require('http');
   server.createServer(app).listen(port);
 }
-
-
-//regular updates
-
-if(beta) {
-  requestOpts.url += '/latest';
-}
-
-function gitCallback (err, res, body) {
-  if(!err && res.statusCode == 200) {
-    var releases = JSON.parse(body);
-    var gitPkg;
-    if(beta) {
-      var prereleases = releases.filter(function(release) {
-        return release.prerelease === true;
-      });
-      gitPkg = prerelease.sort(semver.rcompare)[0];
-    } else {
-      gitPkg = releases[0];
-    }
-    //check updated package version vs local version
-    //if(semver.lt(pkg.version, gitPkg.tag_name)) {
-      var download = function (path) {
-        try {
-          fs.mkdirSync(path);
-          fs.createWriteStream(gitPkg.tag_name+'.zip');
-          console.log('download complete');
-        } catch (e) {
-          if (e.code != 'EEXIST') throw e;
-        }
-      }
-      request(gitPkg.zipball_url)
-        .on('error', function(err) {
-          console.log(err)
-        })
-        .pipe(download('./tmp'));
-      //update local server
-    //  server.destroy(); //shut down the server
-    //}
-  }
-}
-
-request(requestOpts, gitCallback);
 
 console.log('pid is ' + process.pid);
 console.log('Running server at port: ' + port);
@@ -104,9 +55,6 @@ var gracefulShutdown = function() {
   }, 10*1000);
 }
 
-
 //http://glynnbird.tumblr.com/post/54739664725/graceful-server-shutdown-with-nodejs-and-express
 process.on ('SIGTERM', gracefulShutdown);
 process.on ('SIGINT', gracefulShutdown);
-
-

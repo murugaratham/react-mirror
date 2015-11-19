@@ -52,7 +52,7 @@
     "build": "npm run build-js && npm run build-css",
     "watch-css": "nodemon --ignore static/ -e css -x \"npm run build-css\"",
     "watch-js": "watchify src/client/main.js -o static/bundle.js -v",
-    "test": "nohup node bootstrap.js",
+    "test": "node bootstrap.js",
     "start": "npm install && npm run build && node server.js -S -C localhost-cert.pem -K localhost-key.pem",
     "start-no-ssl": "npm install && npm run build && node server.js",
     "dev-watch": "node ./node_modules/concurrently/src/main.js --kill-others \"npm run watch-js\" \"npm run watch-css\" \"npm run start\"",
