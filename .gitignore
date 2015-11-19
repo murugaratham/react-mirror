@@ -4,3 +4,4 @@ localhost-cert.pem
 localhost-key.pem
 localhost.csr
 /tmp
+logs/*
