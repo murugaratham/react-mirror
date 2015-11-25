@@ -161,7 +161,7 @@ function upgradeVersion(gitPkg) {
         console.log(err);
     } else {
       oldfiles = ignore().addIgnoreFile('.gitignore').filter(files);
-      //move all old none ignored files to .react-tmp
+      //copy all old none ignored files to .react-tmp
       console.log('Moving obsolete files: ');
       for(let i=0;i<oldfiles.length;i++) {
         fs.copySync(oldfiles[i], path.join('.react-tmp', oldfiles[i]));
@@ -169,26 +169,25 @@ function upgradeVersion(gitPkg) {
     }
   });
 
-  // //new dir
-  // glob(path.join(__dirname, '/tmp/**/**'), function(err, files){
-  //   if (err) {
-  //       console.log(err);
-  //   } else {
-  //     var regex = new RegExp(/\/tmp\/(?:(?!\/).)*(.*)/);
-  //     newfiles = ignore().addIgnoreFile('.gitignore').filter(files);
-  //     console.log('Deploying new files');
-  //     for(let i=0;i<newfiles.length;i++) {
-  //     //move(file, path.join('.react-tmp', file))      
-  //       var result = newfiles[i].match(regex);
-  //       if(result) {
-  //         console.log('old path: ' + newfiles[i]);
-  //         console.log('new path: ' + path.join(__dirname, result[1]));
-  //         fs.copySync(newfiles[i], path.join(__dirname, result[1]));
-  //       }
-  //     }
-  //     deleteFolderRecursive('.react-tmp');
-  //   }
-  // });
+  glob(path.join(__dirname, '/tmp/**/**'), function(err, files){
+    if (err) {
+        console.log(err);
+    } else {
+      var regex = new RegExp(/\/tmp\/(?:(?!\/).)*(.*)/);
+      newfiles = ignore().addIgnoreFile('.gitignore').filter(files);
+      console.log('Deploying new files');
+      for(let i=0;i<newfiles.length;i++) {
+      //copy unzipped release files onto cwd   
+        var result = newfiles[i].match(regex);
+        if(result) {
+          console.log('old path: ' + newfiles[i]);
+          console.log('new path: ' + path.join(__dirname, result[1]));
+          fs.copySync(newfiles[i], path.join(__dirname, result[1]));
+        }
+      }
+      deleteFolderRecursive('.react-tmp');
+    }
+  });
 
     //run npm install, incase we have new dependencies
     //spawn a new node process
