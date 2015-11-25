@@ -1,18 +1,25 @@
+'use strict';
+
 var path            = require('path'),
     program         = require('commander'),
-    fs              = require('fs'),
+    fs              = require('fs-extra'),
     request         = require('request'),
     semver          = require('semver'),
     extract         = require('extract-zip'),
+    glob            = require('glob-fs'),
     winston         = require('winston'),
-    dailyRotateFile = require('winston-daily-rotate-file');
+    dailyRotateFile = require('winston-daily-rotate-file'),
     cp              = require('child_process'),
     spawn           = cp.spawn,
     exec            = cp.exec,
     pkg             = require(path.join(__dirname, 'package.json'));
 
+var ignore = require('ignore');
+var glob   = require('glob');
+var child;
+
 program
-  .version(pkg.version)  
+  .version(pkg.version)
   .option('-b, --beta', 'Enable prelease (beta)')
   .option('-L, --log <0-5>', '(defaults to 0) <0-5>, error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5', parseInt)
   .option('-s, --silent', 'Disable logging to console')
@@ -33,7 +40,6 @@ var logLevelMapping = [
     headers: {'User-Agent': 'react-mirror'}
   };
 
-console.log(program.log);
 
 if (!isSilent) {
   logTransports.push(new (winston.transports.Console)());
@@ -57,6 +63,8 @@ logger.log('info', 'Setting request default headers', defaultHeaders);
 var baseRequest = request.defaults(defaultHeaders);
 logger.log('silly', 'End setting request default headers');
 
+//Utilities
+
 function mkdirSync (path) {
   logger.log('silly', 'Begin creating directory %s', path);
   try {
@@ -71,6 +79,22 @@ function mkdirSync (path) {
     }
   }
 }
+
+function deleteFolderRecursive(path) {
+  if( fs.existsSync(path) ) {
+    fs.readdirSync(path).forEach(function(file,index){
+      var curPath = path + '/' + file;
+      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath);
+      } else { // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+};
+
+//
 
 function cherryPickPackage(releases) {
   logger.log('silly', 'Begin cherry picking package');
@@ -114,6 +138,7 @@ function fetchZipBall(gitPkg) {
           if(err) { 
             return reject (err);
           } else {
+            fs.unlink(zipFilePath);
             return resolve ();
           }
         });
@@ -126,20 +151,50 @@ function fetchZipBallErr(err) {
   console.log('Error downloading latest update, reason: ' + err);
 }
 
-function updatePackage() {
+function upgradeVersion(gitPkg) {
   //todo:
-  //
-  //mkdir tmp/archived-<semver>
-  //read .gitignore to skip
-  //stop node process
-  //move all none ignored files there
-  //move latest file from tmp into cwd
-  //run npm install, incase we have new dependencies
-  //spawn a new node process
-  //
-  //
-  //how do we update bootstrap.js then?
-  //mkdirSync('');
+  //read latest .gitignore to skip files to be moved  
+  var oldfiles, newfiles;
+  mkdirSync('.react-tmp');
+  glob('**', function(err, files){
+    if (err) {
+        console.log(err);
+    } else {
+      oldfiles = ignore().addIgnoreFile('.gitignore').filter(files);
+      //move all old none ignored files to .react-tmp
+      console.log('Moving obsolete files: ');
+      for(let i=0;i<oldfiles.length;i++) {
+        fs.copySync(oldfiles[i], path.join('.react-tmp', oldfiles[i]));
+      }
+    }
+  });
+
+  // //new dir
+  // glob(path.join(__dirname, '/tmp/**/**'), function(err, files){
+  //   if (err) {
+  //       console.log(err);
+  //   } else {
+  //     var regex = new RegExp(/\/tmp\/(?:(?!\/).)*(.*)/);
+  //     newfiles = ignore().addIgnoreFile('.gitignore').filter(files);
+  //     console.log('Deploying new files');
+  //     for(let i=0;i<newfiles.length;i++) {
+  //     //move(file, path.join('.react-tmp', file))      
+  //       var result = newfiles[i].match(regex);
+  //       if(result) {
+  //         console.log('old path: ' + newfiles[i]);
+  //         console.log('new path: ' + path.join(__dirname, result[1]));
+  //         fs.copySync(newfiles[i], path.join(__dirname, result[1]));
+  //       }
+  //     }
+  //     deleteFolderRecursive('.react-tmp');
+  //   }
+  // });
+
+    //run npm install, incase we have new dependencies
+    //spawn a new node process
+    //
+    //
+    //how do we update bootstrap.js then?
 }
 
 function gitCallback (err, res, body) {  
@@ -150,7 +205,9 @@ function gitCallback (err, res, body) {
       var requireUpdate = compareLocalVersion(gitPkg.tag_name);
       //if(requireUpdate) {
         mkdirSync('./tmp');
-        fetchZipBall(gitPkg).then(updatePackage, fetchZipBallErr);
+        fetchZipBall(gitPkg).then(function() { 
+          upgradeVersion(gitPkg)
+        }, fetchZipBallErr);
       //}        
     } else {
 
@@ -160,6 +217,36 @@ function gitCallback (err, res, body) {
   }
 }
 
+function startApp() {
+  //try npm install to see if there's any new dependencies
+  exec('npm install');
+  exec('npm run build'); 
+  //spawn a new instance of server
+  child = spawn('node', ['server.js']);
+  child.stdout.setEncoding('utf8');
+  child.stdout.on('data', function (data) {
+      var str = data.toString();
+      console.log(str);
+  });
+  child.on('close', function (code) {
+      console.log('process exit code ' + code);
+  });
+}
+
+
+function stopApp() {
+  return new Promise(function (resolve, reject) {
+    if (child) {
+      child.kill('SIGTERM');
+      return resolve();
+    } else {
+      return reject('React mirror is not running');
+    }
+  });
+}
+
+
 //setInterval to check for updates
-//
+startApp();
+
 baseRequest({url: 'https://api.github.com/repos/murugaratham/react-mirror/releases'}, gitCallback);

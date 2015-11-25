@@ -6,7 +6,7 @@ var Jarvis = require('../Utils/Jarvis');
 var voices = [];
 var watch = setInterval(function() {
    voices = speechSynthesis.getVoices();
-   if (voices.length !== 0) {
+   if (voices.length !== 0) {     
       clearInterval(watch);
    }
 }, 1);

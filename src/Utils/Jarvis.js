@@ -20,12 +20,7 @@ var Jarvis = (function (){
 
   var _init = function () {
     if(annyang) {
-      instance.addCommands('i am *name', instance.introduction);      
-      var sayThis = function(result) {
-        console.log(result); 
-      }
-      var commands = { '*say': sayThis  };
-      annyang.addCommands(commands);
+      instance.addCommands('i am *name', instance.introduction);
       annyang.debug(true);
       annyang.start();
     }
@@ -33,7 +28,7 @@ var Jarvis = (function (){
 
   instance.init = function () {
     _init();
-    //Say('Greetings, how may i address you?');
+    Say('Greetings, how may i address you?');
   };
 
   instance.pause = function () {

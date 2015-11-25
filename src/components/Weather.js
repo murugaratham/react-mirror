@@ -33,8 +33,8 @@ var Weather = React.createClass({
   },  
   geolocationSearch: function () {
     var success = function (position) {
-      var lat = position.coords.latitude;
-      var lon = position.coords.longitude;
+      lat = position.coords.latitude;
+      lon = position.coords.longitude;
       this.updateState([lat, lon]);
     }.bind(this);
     var error = function (error) {

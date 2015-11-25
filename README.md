@@ -1,13 +1,16 @@
 
 # React Mirror
 
+##<a href="http://murugaratham.github.io/react-mirror" target="_blank">Demo</a>
+
+
 ### Mirror commands
 - Wait (this will pause the news rotation)
 - Read for me (You can do it while combing your hair)
 
 More coming soon, make a suggestion :)
 
-<img src="http://i64.tinypic.com/106apo3.gif" border="0" alt="Image and video hosting by TinyPic" />
+<img src="http://i64.tinypic.com/sy9rb7.jpg" border="0" alt="Image and video hosting by TinyPic" />
 
 This project is inspired by Evan Cohen's [SmartMirror](https://github.com/evancohen/smart-mirror) which in turn was inspired by the respective projects [HomeMirror](https://github.com/HannahMitt/HomeMirror) and Michael Teeuw's [Magic Mirror](http://michaelteeuw.nl/tagged/magicmirror). 
 I'm taking this as an opportunity to pick up [ReactJS](https://facebook.github.io/react/), better late than never :)
@@ -107,7 +110,6 @@ npm run start //<-- npm script which will build and start the server
 - ~~Updating npm run script for people that just want to use http instead of https (caveat: annyang on http is slower and more problematic, if you want a performant smart mirror, please create a self-signed cert or buy a commercial one :)~~
 - ~~Fetching RSS feeds (news, stock, etc)~~
 - ~~Customize SpeechSynthesisUtterance to have a nicer voice~~
-- Auto update when there's a new release
 - Beautify the screen (I need help here..)
 - Using localstorage to "remember" my name
 - Add more commands and integration with Annyang
