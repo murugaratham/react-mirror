@@ -53,8 +53,13 @@ logTransports.push(new dailyRotateFile({
 
 var logger = new winston.Logger({
   level: logLevel,
-  transports: logTransports
+  transports: logTransports,
+  exitOnError: false
 });
+
+winston.handleExceptions(new winston.transports.File({ 
+  filename: 'logs/fatal.log' 
+}))
 
 mkdirSync('logs'); //<-- in case there's no log folder
 
@@ -164,7 +169,7 @@ function upgradeVersion(gitPkg) {
       //copy all old none ignored files to .react-tmp
       console.log('Moving obsolete files: ');
       for(let i=0;i<oldfiles.length;i++) {
-        fs.copySync(oldfiles[i], path.join('.react-tmp', oldfiles[i]));
+        //fs.copySync(oldfiles[i], path.join('.react-tmp', oldfiles[i]));
       }
     }
   });
@@ -182,7 +187,7 @@ function upgradeVersion(gitPkg) {
         if(result) {
           console.log('old path: ' + newfiles[i]);
           console.log('new path: ' + path.join(__dirname, result[1]));
-          fs.copySync(newfiles[i], path.join(__dirname, result[1]));
+          //fs.copySync(newfiles[i], path.join(__dirname, result[1]));
         }
       }
       deleteFolderRecursive('.react-tmp');
@@ -248,4 +253,10 @@ function stopApp() {
 //setInterval to check for updates
 startApp();
 
-baseRequest({url: 'https://api.github.com/repos/murugaratham/react-mirror/releases'}, gitCallback);
+setInterval(function() {
+  baseRequest({url: 'https://api.github.com/repos/murugaratham/react-mirror/releases'}, gitCallback);
+}, 10000);
+
+
+//keep bootstrap running..
+process.stdin.resume();

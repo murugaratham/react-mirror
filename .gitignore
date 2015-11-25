@@ -1,8 +1,5 @@
-localhost.csr
-localhost-key.pem
+static/*
+node_modules/*
 localhost-cert.pem
-/node_modules
-/static
-/tmp
-/logs
-/.react-tmp
+localhost-key.pem
+localhost.csr
