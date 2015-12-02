@@ -15,7 +15,7 @@ More coming soon, make a suggestion :)
 This project is inspired by Evan Cohen's [SmartMirror](https://github.com/evancohen/smart-mirror) which in turn was inspired by the respective projects [HomeMirror](https://github.com/HannahMitt/HomeMirror) and Michael Teeuw's [Magic Mirror](http://michaelteeuw.nl/tagged/magicmirror). 
 I'm taking this as an opportunity to pick up [ReactJS](https://facebook.github.io/react/), better late than never :)
 
-And also since Evan Cohen's SmartMirror was using [forecast.io](http://forecast.io/), which doesn't support metric units, i decided to hack around and use [openweather](http://www.openweathermap.com/api) instead.
+And also since Evan Cohen's SmartMirror was using [forecast.io](http://forecast.io/)~~, which doesn't support metric units~~ (it does support), but i decided to hack around and use [openweather](http://www.openweathermap.com/api) instead.
 
 ### Quick start (No SSL)
 Download and install [node.js](https://nodejs.org/en/)
