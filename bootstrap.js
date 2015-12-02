@@ -171,8 +171,12 @@ function upgradeVersion(gitPkg) {
       for(let i=0;i<oldfiles.length;i++) {
         let oldPath = oldfiles[i];
         let newPath = path.join('.react-tmp', oldfiles[i]);
-        logger.log('debug', 'Moving old file \'%s\' to \'%s\'', oldPath, newPath);
-        fs.copySync(oldPath, newPath);
+        if(oldPath.indexOf('bootstrap.js') === -1) {
+          //logger.log('debug', 'Moving old file \'%s\' to \'%s\'', oldPath, newPath);
+          //fs.copySync(oldPath, newPath);
+        } else {
+          //logger.log('warn', oldPath + ' -> ' + newPath);
+        }
       }
     }
     glob(path.join(__dirname, '/tmp/**/**'), function(err, files){
@@ -189,14 +193,15 @@ function upgradeVersion(gitPkg) {
           if(result) {
             let tmpPath = newfiles[i];
             let cwdPath = path.join(__dirname, result[1]);
-            if(tmpPath.indexOf('bootstrap.js') === -1)
-              logger.log('debug', 'Moving latest file \'%s\' to \'%s\'', tmpPath, cwdPath);
-            else //dirty way for now..
-              logger.log('warn', 'ignoring bootstrap.js');
-            fs.copySync(newfiles[i], path.join(__dirname, result[1]));
+            if(tmpPath.indexOf('bootstrap.js') === -1) {
+              logger.log('debug', 'Moving latest file \'%s\' to \'%s\'', tmpPath, cwdPath);            
+              //fs.copySync(tmpPath, cwdPath);
+            } else {//dirty way for now..
+              logger.log('warn', tmpPath + ' -> ' + cwdPath);
+            }
           }
         }
-        deleteFolderRecursive('.react-tmp');
+        //deleteFolderRecursive('.react-tmp');
       }
     });
   });
@@ -259,7 +264,7 @@ startApp();
 setInterval(function() {
   baseRequest({url: 'https://api.github.com/repos/murugaratham/react-mirror/releases'}
     , gitCallback);
-}, 30000);
+}, 45000);
 
 
 //keep bootstrap running..

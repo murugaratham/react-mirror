@@ -9,7 +9,7 @@ var React             = require('react'),
     Clock             = require('./components/Clock'),
     Calendar          = require('./components/Calendar'),
     Weather           = require('./components/Weather'),
-    Feed              = require('./components/Rss'),
+    Feed              = require('./components/rss'),
     Jarvis            = require('./Utils/Jarvis'),
     Constants         = require('./Utils/Constants');
 
