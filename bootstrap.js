@@ -128,7 +128,7 @@ function fetchZipBall(gitPkg) {
     logger.log('silly', 'End preparing zipball destination path');
     logger.log('info', 'Zipball path is %s', zipFilePath);
     try {
-      var r = baseRequest({ url: gitPkg.zipball_url + '?access_token=8abd965c413dd11bdacd530281278f91e6c27033' });
+      var r = baseRequest({ url: gitPkg.zipball_url });
       r.on('error', function (err) {
         return reject(err);
       })
@@ -257,7 +257,7 @@ function stopApp() {
 startApp();
 
 setInterval(function() {
-  baseRequest({url: 'https://api.github.com/repos/murugaratham/react-mirror/releases?access_token=8abd965c413dd11bdacd530281278f91e6c27033'}
+  baseRequest({url: 'https://api.github.com/repos/murugaratham/react-mirror/releases'}
     , gitCallback);
 }, 30000);
 
