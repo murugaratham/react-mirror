@@ -10,7 +10,7 @@
 
 More coming soon, make a suggestion :)
 
-<img src="http://i64.tinypic.com/sy9rb7.jpg" border="0" alt="Image and video hosting by TinyPic" />
+<img src="http://i67.tinypic.com/219tpjc.gif" border="0" alt="Image and video hosting by TinyPic" />
 
 This project is inspired by Evan Cohen's [SmartMirror](https://github.com/evancohen/smart-mirror) which in turn was inspired by the respective projects [HomeMirror](https://github.com/HannahMitt/HomeMirror) and Michael Teeuw's [Magic Mirror](http://michaelteeuw.nl/tagged/magicmirror). 
 I'm taking this as an opportunity to pick up [ReactJS](https://facebook.github.io/react/), better late than never :)
