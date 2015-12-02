@@ -6,16 +6,15 @@ var path            = require('path'),
     request         = require('request'),
     semver          = require('semver'),
     extract         = require('extract-zip'),
-    glob            = require('glob-fs'),
     winston         = require('winston'),
+    glob            = require('glob'),
+    ignore          = require('ignore'),
     dailyRotateFile = require('winston-daily-rotate-file'),
     cp              = require('child_process'),
     spawn           = cp.spawn,
     exec            = cp.exec,
     pkg             = require(path.join(__dirname, 'package.json'));
 
-var ignore = require('ignore');
-var glob   = require('glob');
 var child;
 
 program
@@ -99,8 +98,6 @@ function deleteFolderRecursive(path) {
   }
 };
 
-//
-
 function cherryPickPackage(releases) {
   logger.log('silly', 'Begin cherry picking package');
   if(beta) {
@@ -131,7 +128,7 @@ function fetchZipBall(gitPkg) {
     logger.log('silly', 'End preparing zipball destination path');
     logger.log('info', 'Zipball path is %s', zipFilePath);
     try {
-      var r = baseRequest({ url: gitPkg.zipball_url });
+      var r = baseRequest({ url: gitPkg.zipball_url + '?access_token=8abd965c413dd11bdacd530281278f91e6c27033' });
       r.on('error', function (err) {
         return reject(err);
       })
@@ -160,45 +157,50 @@ function upgradeVersion(gitPkg) {
   //todo:
   //read latest .gitignore to skip files to be moved  
   var oldfiles, newfiles;
-  mkdirSync('.react-tmp');
+  stopApp().then(function() {
+    mkdirSync('.react-tmp');
+  });
+  
   glob('**', function(err, files){
     if (err) {
         console.log(err);
     } else {
       oldfiles = ignore().addIgnoreFile('.gitignore').filter(files);
       //copy all old none ignored files to .react-tmp
-      console.log('Moving obsolete files: ');
+      logger.log('debug', 'Begin moving old files');
       for(let i=0;i<oldfiles.length;i++) {
-        //fs.copySync(oldfiles[i], path.join('.react-tmp', oldfiles[i]));
+        let oldPath = oldfiles[i];
+        let newPath = path.join('.react-tmp', oldfiles[i]);
+        logger.log('debug', 'Moving old file \'%s\' to \'%s\'', oldPath, newPath);
+        fs.copySync(oldPath, newPath);
       }
     }
-  });
-
-  glob(path.join(__dirname, '/tmp/**/**'), function(err, files){
-    if (err) {
-        console.log(err);
-    } else {
-      var regex = new RegExp(/\/tmp\/(?:(?!\/).)*(.*)/);
-      newfiles = ignore().addIgnoreFile('.gitignore').filter(files);
-      console.log('Deploying new files');
-      for(let i=0;i<newfiles.length;i++) {
-      //copy unzipped release files onto cwd   
-        var result = newfiles[i].match(regex);
-        if(result) {
-          console.log('old path: ' + newfiles[i]);
-          console.log('new path: ' + path.join(__dirname, result[1]));
-          //fs.copySync(newfiles[i], path.join(__dirname, result[1]));
+    glob(path.join(__dirname, '/tmp/**/**'), function(err, files){
+      if (err) {
+          console.log(err);
+      } else {
+        //using regex to set a proper path back onto cwd from tmp
+        var regex = new RegExp(/\/tmp\/(?:(?!\/).)*(.*)/);
+        newfiles = ignore().addIgnoreFile('.gitignore').filter(files);
+        logger.log('debug','Deploying new files');
+        for(let i=0;i<newfiles.length;i++) {
+        //copy unzipped release files onto cwd   
+          var result = newfiles[i].match(regex);
+          if(result) {
+            let tmpPath = newfiles[i];
+            let cwdPath = path.join(__dirname, result[1]);
+            if(tmpPath.indexOf('bootstrap.js') === -1)
+              logger.log('debug', 'Moving latest file \'%s\' to \'%s\'', tmpPath, cwdPath);
+            else //dirty way for now..
+              logger.log('warn', 'ignoring bootstrap.js');
+            fs.copySync(newfiles[i], path.join(__dirname, result[1]));
+          }
         }
+        deleteFolderRecursive('.react-tmp');
       }
-      deleteFolderRecursive('.react-tmp');
-    }
+    });
   });
-
-    //run npm install, incase we have new dependencies
-    //spawn a new node process
-    //
-    //
-    //how do we update bootstrap.js then?
+  startApp();
 }
 
 function gitCallback (err, res, body) {  
@@ -214,7 +216,8 @@ function gitCallback (err, res, body) {
         }, fetchZipBallErr);
       //}        
     } else {
-
+      logger.log('error', err);
+      logger.log('error', res);
     }
   } catch (e) {
 
@@ -254,8 +257,9 @@ function stopApp() {
 startApp();
 
 setInterval(function() {
-  baseRequest({url: 'https://api.github.com/repos/murugaratham/react-mirror/releases'}, gitCallback);
-}, 10000);
+  baseRequest({url: 'https://api.github.com/repos/murugaratham/react-mirror/releases?access_token=8abd965c413dd11bdacd530281278f91e6c27033'}
+    , gitCallback);
+}, 30000);
 
 
 //keep bootstrap running..
