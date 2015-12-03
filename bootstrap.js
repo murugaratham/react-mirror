@@ -15,7 +15,7 @@ var path            = require('path'),
     exec            = cp.exec,
     pkg             = require(path.join(__dirname, 'package.json'));
 
-var child;
+var child, logger, beta = !!program.beta, defaultHeaders = {headers: {'User-Agent': 'react-mirror'}};
 
 program
   .version(pkg.version)
@@ -24,45 +24,42 @@ program
   .option('-s, --silent', 'Disable logging to console')
   .parse(process.argv);
 
-var logLevelMapping = [
-  'error',
-  'warn',
-  'info',
-  'verbose',
-  'debug',
-  'silly'
-  ], logTransports  = [],
-  logLevel          = logLevelMapping[!!program.log ? program.log : 0],
-  isSilent          = !!program.silent || false,
-  beta              = !!program.beta,
-  defaultHeaders    = {
-    headers: {'User-Agent': 'react-mirror'}
-  };
+var initLogger = (function() {
+  'use strict';
+  var logLevelMapping = [
+        'error',
+        'warn',
+        'info',
+        'verbose',
+        'debug',
+        'silly'
+      ],
+      logTransports  = [],
+      logLevel       = logLevelMapping[!!program.log ? program.log : 0],
+      isSilent       = !!program.silent || false;
 
+  if (!isSilent) {
+    logTransports.push(new (winston.transports.Console)());
+  }
 
-if (!isSilent) {
-  logTransports.push(new (winston.transports.Console)());
-}
+  logTransports.push(new dailyRotateFile({
+    name: 'file',
+    filename: path.join(__dirname, 'logs', 'react-logs.logs'),
+    datePattern: '.yyyy-MM-dd'
+  }));
 
-logTransports.push(new dailyRotateFile({
-  name: 'file',
-  filename: path.join(__dirname, 'logs', 'react-logs.logs'),
-  datePattern: '.yyyy-MM-dd'
-}));
+  winston.handleExceptions(new winston.transports.File({ filename: 'logs/fatal.log' }));
+  
+  logger = new winston.Logger({
+    level: logLevel,
+    transports: logTransports,
+    exitOnError: false
+  });
 
-var logger = new winston.Logger({
-  level: logLevel,
-  transports: logTransports,
-  exitOnError: false
-});
+  mkdirSync('logs'); //<-- in case there's no log folder
+  logger.log('silly', 'React bootstrap server initialize with following options -b %s -L %s -s %s', beta, logLevel, isSilent);
+}());
 
-winston.handleExceptions(new winston.transports.File({ 
-  filename: 'logs/fatal.log' 
-}))
-
-mkdirSync('logs'); //<-- in case there's no log folder
-
-logger.log('silly', 'React bootstrap server initialize with following options -b %s -L %s -s %s', beta, logLevel, isSilent);
 logger.log('info', 'Setting request default headers', defaultHeaders);
 var baseRequest = request.defaults(defaultHeaders);
 logger.log('silly', 'End setting request default headers');
@@ -149,13 +146,11 @@ function fetchZipBall(gitPkg) {
   });
 }
 
-function fetchZipBallErr(err) {
-  console.log('Error downloading latest update, reason: ' + err);
-}
+function errorHandler(error) {
+  logger.log('error', error);
+};
 
-function upgradeVersion(gitPkg) {
-  //todo:
-  //read latest .gitignore to skip files to be moved  
+function upgradeVersion(gitPkg) { 
   var oldfiles, newfiles;
   stopApp().then(function() {
     mkdirSync('.react-tmp');
@@ -172,11 +167,9 @@ function upgradeVersion(gitPkg) {
         let oldPath = oldfiles[i];
         let newPath = path.join('.react-tmp', oldfiles[i]);
         if(oldPath.indexOf('bootstrap.js') === -1) {
-          //logger.log('debug', 'Moving old file \'%s\' to \'%s\'', oldPath, newPath);
-          //fs.copySync(oldPath, newPath);
-        } else {
-          //logger.log('warn', oldPath + ' -> ' + newPath);
-        }
+          logger.log('debug', 'Moving old file \'%s\' to \'%s\'', oldPath, newPath);
+          fs.copySync(oldPath, newPath);
+        } 
       }
     }
     glob(path.join(__dirname, '/tmp/**/**'), function(err, files){
@@ -188,44 +181,43 @@ function upgradeVersion(gitPkg) {
         newfiles = ignore().addIgnoreFile('.gitignore').filter(files);
         logger.log('debug','Deploying new files');
         for(let i=0;i<newfiles.length;i++) {
+          debugger;
         //copy unzipped release files onto cwd   
           var result = newfiles[i].match(regex);
           if(result) {
             let tmpPath = newfiles[i];
             let cwdPath = path.join(__dirname, result[1]);
             if(tmpPath.indexOf('bootstrap.js') === -1) {
-              logger.log('debug', 'Moving latest file \'%s\' to \'%s\'', tmpPath, cwdPath);            
-              //fs.copySync(tmpPath, cwdPath);
-            } else {//dirty way for now..
-              logger.log('warn', tmpPath + ' -> ' + cwdPath);
-            }
+              logger.log('debug', 'Moving latest file \'%s\' to \'%s\'', tmpPath, cwdPath);
+              fs.copySync(tmpPath, cwdPath);
+            } 
           }
         }
-        //deleteFolderRecursive('.react-tmp');
+        deleteFolderRecursive('.react-tmp');
+        startApp();
       }
     });
   });
-  startApp();
 }
 
-function gitCallback (err, res, body) {  
+function gitCallback (err, res, body) {
   try {
     if(!err && res.statusCode == 200) {
       var releases = JSON.parse(body);
       var gitPkg = cherryPickPackage(releases);
       var requireUpdate = compareLocalVersion(gitPkg.tag_name);
-      //if(requireUpdate) {
+      if(requireUpdate) {
         mkdirSync('./tmp');
-        fetchZipBall(gitPkg).then(function() { 
-          upgradeVersion(gitPkg)
-        }, fetchZipBallErr);
-      //}        
+        fetchZipBall(gitPkg).then(function() { upgradeVersion(gitPkg) }, errorHandler);
+      } else {
+        logger.log('info', 'Version (%s) is up to date', gitPkg.tag_name);
+      }
     } else {
       logger.log('error', err);
       logger.log('error', res);
     }
   } catch (e) {
-
+    logger.log('error')
   }
 }
 
@@ -237,14 +229,13 @@ function startApp() {
   child = spawn('node', ['server.js']);
   child.stdout.setEncoding('utf8');
   child.stdout.on('data', function (data) {
-      var str = data.toString();
-      console.log(str);
+    var str = data.toString();
+    console.log(str);
   });
   child.on('close', function (code) {
-      console.log('process exit code ' + code);
+    console.log('process exit code ' + code);
   });
 }
-
 
 function stopApp() {
   return new Promise(function (resolve, reject) {

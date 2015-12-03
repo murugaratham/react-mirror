@@ -1,7 +1,7 @@
 {
   "name": "React-mirror",
   "description": "Smart mirror using ReactJS",
-  "version": "0.0.2",
+  "version": "v0.0.3-alpha",
   "style": "css/*.css",
   "repository": {
     "type": "git",
