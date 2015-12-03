@@ -181,7 +181,6 @@ function upgradeVersion(gitPkg) {
         newfiles = ignore().addIgnoreFile('.gitignore').filter(files);
         logger.log('debug','Deploying new files');
         for(let i=0;i<newfiles.length;i++) {
-          debugger;
         //copy unzipped release files onto cwd   
           var result = newfiles[i].match(regex);
           if(result) {
