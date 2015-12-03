@@ -181,6 +181,7 @@ function upgradeVersion(gitPkg) {
         newfiles = ignore().addIgnoreFile('.gitignore').filter(files);
         logger.log('debug','Deploying new files');
         for(let i=0;i<newfiles.length;i++) {
+          debugger;
         //copy unzipped release files onto cwd   
           var result = newfiles[i].match(regex);
           if(result) {
@@ -256,6 +257,11 @@ setInterval(function() {
     , gitCallback);
 }, 45000);
 
-
 //keep bootstrap running..
 process.stdin.resume();
+
+process.on('SIGTERM', function () {
+  stopApp().then(function() {
+    process.exit(0);
+  });
+});
