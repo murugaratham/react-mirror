@@ -2,9 +2,6 @@
 
 # React Mirror
 
-##<a href="http://murugaratham.github.io/react-mirror" target="_blank">Demo</a>
-
-
 ### Mirror commands
 - Wait (this will pause the news rotation)
 - Read for me (You can do it while combing your hair)
@@ -61,9 +58,12 @@ module.exports = Constants;
 
 #### Get the mirror running
 ```
-npm install
-npm run start-no-ssl
+npm run kiosk
 ```
+
+#### For fellow hackers
+There are two major components to the mirror, one of them of course is the mirror app itself, which is mainly a ReactJS app. The other is [bootstrap](http://whatis.techtarget.com/definition/bootstrap).js, it's pretty much a nodeJS server, i'm using a setInterval to check for version updates from github repo, essentially, it's a self-updating mechanism, it's still primitive but it works. Reach out to me to have more info and get hacking.
+
 
 ### Getting Started (Recommended)
 
@@ -111,13 +111,11 @@ npm run start //<-- npm script which will build and start the server
 - ~~Updating npm run script for people that just want to use http instead of https (caveat: annyang on http is slower and more problematic, if you want a performant smart mirror, please create a self-signed cert or buy a commercial one :)~~
 - ~~Fetching RSS feeds (news, stock, etc)~~
 - ~~Customize SpeechSynthesisUtterance to have a nicer voice~~
+- Using socket.io to notify the page to reload when i bump the version on github
 - Beautify the screen (I need help here..)
 - Using localstorage to "remember" my name
 - Add more commands and integration with Annyang
 
-
-#### [http-server](https://github.com/indexzero/http-server) was the ideal package for react-mirror
-Firstly, it lived up to it's name of simple, zero-configuration command-line http server. And it also made my life much easier by being able to proxy requests that can't be resolved locally. Thanks [indexzero](https://github.com/indexzero)!
 
 ### I need css help!
 I need people with a eye for design to make the UI more appealing, it looks boring now
