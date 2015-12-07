@@ -45,6 +45,7 @@
     "watchify": "^3.6.0"
   },
   "scripts": {
+    "kiosk": "node bootstrap.js",
     "build-js": "browserify src/main.js -o static/bundle.js",
     "build-css": "cat css/*.css > static/bundle.css",
     "build": "npm run build-js && npm run build-css",
