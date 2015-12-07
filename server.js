@@ -34,5 +34,8 @@ if(ssl) {
   server.createServer(app).listen(port);
 }
 
+app.get('/version', function (req, res){
+  res.json(pkg.version);
+});
 
 console.log('Running server at port: ' + port);

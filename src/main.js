@@ -3,6 +3,7 @@
 var React             = require('react'),
     ReactDOM          = require('react-dom'),
     ReactBS           = require('react-bootstrap'),
+    $                 = require('jquery'),
     Grid              = ReactBS.Grid,
     Row               = ReactBS.Row,
     Col               = ReactBS.Col,
@@ -16,8 +17,19 @@ var React             = require('react'),
 //main app
 var SmartMirror = React.createClass({
   displayName: 'SmartMirror',
+  getInitialState: function() {
+    return { version: '' };
+  },
   componentDidMount: function() {
+    var self = this;
     Jarvis.init();
+    $.get('/version', function(data) {
+      if (self.isMounted()) {
+        self.setState({
+          version: data
+        });
+      }
+    });
   },
   render: function() {
     return (
@@ -32,6 +44,13 @@ var SmartMirror = React.createClass({
           <Col xs={4}>
             <Weather pollInterval={Constants.Weather.RefreshInterval}/>
           </Col>
+        </Row>
+        <Row>
+        <Col xs={12}>
+          <div className='label label-default text-right'>
+            {this.state.version}
+          </div>
+        </Col>
         </Row>
       </Grid>
     );

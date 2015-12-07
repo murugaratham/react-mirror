@@ -15,14 +15,15 @@ var path            = require('path'),
     exec            = cp.exec,
     pkg             = require(path.join(__dirname, 'package.json'));
 
-var child, logger, beta = !!program.beta, defaultHeaders = {headers: {'User-Agent': 'react-mirror'}};
-
 program
   .version(pkg.version)
   .option('-b, --beta', 'Enable prelease (beta)')
   .option('-L, --log <0-5>', '(defaults to 0) <0-5>, error: 0, warn: 1, info: 2, verbose: 3, debug: 4, silly: 5', parseInt)
   .option('-s, --silent', 'Disable logging to console')
+  .option('-D, --debug', 'Debug mode, always fetch releases from github')
   .parse(process.argv);
+
+var child, logger, beta = !!program.beta, defaultHeaders = {headers: {'User-Agent': 'react-mirror'}}, debug = !!program.debug;
 
 var initLogger = (function() {
   'use strict';
@@ -57,7 +58,8 @@ var initLogger = (function() {
   });
 
   mkdirSync('logs'); //<-- in case there's no log folder
-  logger.log('silly', 'React bootstrap server initialize with following options -b %s -L %s -s %s', beta, logLevel, isSilent);
+  logger.log('silly', 'React bootstrap server initialize with following options -b %s -L %s -s %s -d %s'
+    , beta, logLevel, isSilent, debug);
 }());
 
 logger.log('info', 'Setting request default headers', defaultHeaders);
@@ -181,19 +183,19 @@ function upgradeVersion(gitPkg) {
         newfiles = ignore().addIgnoreFile('.gitignore').filter(files);
         logger.log('debug','Deploying new files');
         for(let i=0;i<newfiles.length;i++) {
-          debugger;
         //copy unzipped release files onto cwd   
           var result = newfiles[i].match(regex);
           if(result) {
             let tmpPath = newfiles[i];
             let cwdPath = path.join(__dirname, result[1]);
-            if(tmpPath.indexOf('bootstrap.js') === -1) {
+            if(tmpPath.indexOf('bootstrap.js') === -1 && !tmpPath.endsWith('/react-mirror')) {
               logger.log('debug', 'Moving latest file \'%s\' to \'%s\'', tmpPath, cwdPath);
               fs.copySync(tmpPath, cwdPath);
             } 
           }
         }
         deleteFolderRecursive('.react-tmp');
+        deleteFolderRecursive('tmp');
         startApp();
       }
     });
@@ -206,7 +208,7 @@ function gitCallback (err, res, body) {
       var releases = JSON.parse(body);
       var gitPkg = cherryPickPackage(releases);
       var requireUpdate = compareLocalVersion(gitPkg.tag_name);
-      if(requireUpdate) {
+      if(debug || requireUpdate) {
         mkdirSync('./tmp');
         fetchZipBall(gitPkg).then(function() { upgradeVersion(gitPkg) }, errorHandler);
       } else {
@@ -223,10 +225,12 @@ function gitCallback (err, res, body) {
 
 function startApp() {
   //try npm install to see if there's any new dependencies
+  logger.log('debug', 'starting app');
   exec('npm install');
   exec('npm run build'); 
   //spawn a new instance of server
-  child = spawn('node', ['server.js']);
+  //child = spawn('node', ['server.js']);
+  child = spawn('npm', ['run', 'start']);
   child.stdout.setEncoding('utf8');
   child.stdout.on('data', function (data) {
     var str = data.toString();
@@ -239,6 +243,7 @@ function startApp() {
 
 function stopApp() {
   return new Promise(function (resolve, reject) {
+    logger.log('debug', 'killing app');
     if (child) {
       child.kill('SIGTERM');
       return resolve();
