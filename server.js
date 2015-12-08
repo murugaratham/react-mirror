@@ -1,7 +1,7 @@
 var path      = require('path'),
     express   = require('express'),
     program   = require('commander'),
-    fs        = require('fs');
+    fs        = require('fs'),
     pkg       = require(path.join(__dirname, 'package.json'));
 
 // Parse command line options
@@ -21,18 +21,30 @@ var ssl  = !!program.ssl,
 
 var server, opts = {}, app = express();
 
-app.use('/', express.static(__dirname + '/'));
-
 if(ssl) {
-  server = require('https');
+  var https = require('https');
   opts.cert = fs.readFileSync(cert);
   opts.key = fs.readFileSync(key);
-  server.createServer(opts, app).listen(port);
+  //server.createServer(opts, app).listen(port);
+  server = https.createServer(opts, app).listen(port);
+  
   console.log('ssl enabled');
 } else {
-  server = require('http');
-  server.createServer(app).listen(port);
+  server = app.listen(port);
 }
+
+var io = require('socket.io').listen(server);
+
+app.use('/static', express.static(__dirname + '/static'));
+app.use('/font', express.static(__dirname + '/font'));
+app.use('/images', express.static(__dirname + '/images'));
+app.get('/', function(req, res,next) {  
+    res.sendFile(__dirname + '/index.html');
+});
+
+io.on('connection', function(socket) {
+  console.log('test');
+});
 
 app.get('/version', function (req, res){
   res.json(pkg.version);
