@@ -3,6 +3,10 @@
   "description": "Smart mirror using ReactJS",
   "version": "v0.0.2-alpha",
   "style": "css/*.css",
+  "main": "main.js",
+  "config": {
+    "msvs_version": 2015
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/murugaratham/react-mirror.git"
@@ -25,7 +29,11 @@
     "babelify": "*",
     "browserify": "^12.0.1",
     "commander": "^2.9.0",
+    "electron-prebuilt": "^0.35.0",
     "express": "^4.13.3",
+    "extract-zip": "^1.3.0",
+    "fs-extra": "^0.26.2",
+    "ignore": "^2.2.19",
     "jquery": "^2.0",
     "moment": "*",
     "react": "^0.14.0",
@@ -33,7 +41,10 @@
     "react-css-transition-replace": "^1.0.0",
     "react-dom": "^0.14.0",
     "react-intl": "1.2.0",
-    "socket.io": "^1.3.7"
+    "request": "^2.67.0",
+    "socket.io": "^1.3.7",
+    "winston": "^2.1.1",
+    "winston-daily-rotate-file": "^1.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.4",

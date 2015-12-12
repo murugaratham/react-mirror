@@ -230,7 +230,7 @@ function startApp() {
   exec('npm run build'); 
   //spawn a new instance of server
   //child = spawn('node', ['server.js']);
-  child = spawn('npm', ['run', 'start']);
+  child = cp.spawn('npm', ['run', 'start']);
   child.stdout.setEncoding('utf8');
   child.stdout.on('data', function (data) {
     var str = data.toString();

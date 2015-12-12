@@ -9,7 +9,7 @@ var Service = (function() {
   instance.getFeed = function (feedUrl, callback) {  
     if(!/hr-pulsesubscriber.appspot.com/i.test(feedUrl)) {
       feedUrl = window.location.protocol 
-      + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=150&callback=?&q=' 
+      + 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=150&callback=?&q=' 
       + encodeURIComponent(feedUrl);
     }
     return $.ajax({
@@ -19,7 +19,7 @@ var Service = (function() {
   };
 
   instance.getWeather =  function (latlon, city) {
-    var yql = '//query.yahooapis.com/v1/public/yql?q=';
+    var yql = 'https://query.yahooapis.com/v1/public/yql?q=';
     yql += encodeURIComponent('select * from html where url=');
     yql += encodeURIComponent('"http://api.openweathermap.org/data/2.5/forecast/daily?');
     if(city)
