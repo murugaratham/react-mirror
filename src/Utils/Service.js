@@ -9,7 +9,7 @@ var Service = (function() {
   instance.getFeed = function (feedUrl, callback) {  
     if(!/hr-pulsesubscriber.appspot.com/i.test(feedUrl)) {
       feedUrl = window.location.protocol 
-      + 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=150&callback=?&q=' 
+      + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=150&callback=?&q=' 
       + encodeURIComponent(feedUrl);
     }
     return $.ajax({

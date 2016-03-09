@@ -230,14 +230,15 @@ function startApp() {
   exec('npm run build'); 
   //spawn a new instance of server
   //child = spawn('node', ['server.js']);
-  child = cp.spawn('npm', ['run', 'start']);
+  //child = cp.spawn('npm', ['run', 'start']);
+  child = cp.spawn('npm', ['run', 'start-no-ssl']);
   child.stdout.setEncoding('utf8');
   child.stdout.on('data', function (data) {
     var str = data.toString();
     console.log(str);
   });
   child.on('close', function (code) {
-    console.log('process exit code ' + code);
+    console.log('process exit code ' + code);    
   });
 }
 

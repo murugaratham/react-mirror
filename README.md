@@ -58,6 +58,7 @@ module.exports = Constants;
 
 #### Get the mirror running
 ```
+npm install
 npm run kiosk
 ```
 
